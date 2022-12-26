@@ -7,7 +7,7 @@
 
 int main()
 {
-	Engine::Window window(sf::VideoMode(1280, 720), "fuck");
+	Engine::Window window(sf::VideoMode(1280, 720), "window");
 	sf::Event event;
 	
 	sf::RectangleShape shape({200, 200});
