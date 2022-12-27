@@ -42,6 +42,8 @@ namespace Scene {
             scale = 0.1f;
             return;
         }
+        offset.x = offset.x/scale*s;
+        offset.y = offset.y/scale*s;
         scale = s;
     }
 
