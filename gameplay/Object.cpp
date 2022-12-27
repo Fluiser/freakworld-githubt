@@ -81,7 +81,6 @@ namespace game_object {
 
 	bool Dynamic_Object::canView(Math::vec2f scene_start, Math::vec2f scene_end) const
 	{
-		std::cout << "FUCK\n";
 		auto pos = this->sprite.getPosition();
 		auto size = this->getSize();
 		Math::vec2f end{ pos.x + size.x, pos.y + size.y };

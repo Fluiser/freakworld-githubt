@@ -39,7 +39,7 @@ int main()
 
 	circle.setPosition(sizeWindow);
 
-    std::cout << "\n\n" << scene.getScale()/ (float)obj.texture->getSize().x << "\n" << scene.getScale()/ (float)obj.texture->getSize().y << "\n\n";
+	DEB_LOG("\n\n" << scene.getScale()/ (float)obj.texture->getSize().x << "\n" << scene.getScale()/ (float)obj.texture->getSize().y << "\n\n");
 
 	while (window.isOpen())
 	{

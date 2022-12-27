@@ -67,7 +67,6 @@ namespace Scene {
 
     sf::Vector2f Scene::getPosition(sf::Vector2i p)
     {
-        std::cout << (((float)p.x) * (scale)) << ' ' << (((float)p.y) * (scale)) << '\n';
 
         return sf::Vector2f(
             (((float)p.x) * (scale)),
