@@ -7,13 +7,13 @@
 
 int main()
 {
-	Engine::Window window(sf::VideoMode(1280, 720), "window");
+	Engine::Window window(sf::VideoMode(1280, 720), "fuck");
 	sf::Event event;
 	
 	sf::RectangleShape shape({200, 200});
 	shape.setFillColor(sf::Color::Red);
 	sf::CircleShape circle(3);
-	circle.setFillColor(sf::Color::Red);
+	circle.setFillColor(sf::Color::Yellow);
 
 	circle.setPosition(1280/2, 720/2);
 	game_object::Dynamic_Object obj;
@@ -21,6 +21,7 @@ int main()
 	obj.loadFromFile("box.png");
 	auto c = obj.texture->getSize();
 	auto s = obj.sprite.getScale();
+
 	std::cout << "Scale: " << s.x << ' ' << s.y << '\n';
 	std::cout << "Size: " << c.x << ' ' << c.y << '\n';
 	std::cout << "Object size: " << obj.getSize().x << ' ' << obj.getSize().y << '\n';
@@ -31,6 +32,14 @@ int main()
 	} last_point;
 
 	Scene::Scene scene(Scene::Scene::type_t::DYNAMIC_SCENE);
+
+	auto* obfdsafddafsj = (game_object::Dynamic_Object*)scene.get({ 0, 0 });
+
+	sf::Vector2f sizeWindow( window.getSize().x/2.0f, window.getSize().y/2.0f  );
+
+	circle.setPosition(sizeWindow);
+
+    std::cout << "\n\n" << scene.getScale()/ (float)obj.texture->getSize().x << "\n" << scene.getScale()/ (float)obj.texture->getSize().y << "\n\n";
 
 	while (window.isOpen())
 	{
@@ -55,13 +64,19 @@ int main()
 			}
 			if(event.type == sf::Event::MouseMoved && last_point.filled)
 			{
-				scene.offset.x -= (last_point.pos.x-event.mouseMove.x);
+				scene.offset.x += (last_point.pos.x-event.mouseMove.x);
 				scene.offset.y -= (last_point.pos.y-event.mouseMove.y);
 				last_point.pos.x = event.mouseMove.x;
 				last_point.pos.y = event.mouseMove.y;
 			}
 			if(event.type == sf::Event::KeyPressed)
 			{
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+				{
+					auto v = scene.getVisibleArea(window.getSize());
+					std::cout << "VISIBLE AREA: (" << v.start.x << "; " << v.start.y <<
+								 ") -> (" << v.end.x << "; " << v.end.y << ")\n";
+				}
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 					obj.move({-1, 0});
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -73,10 +88,18 @@ int main()
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) return 0;
 			}
 		}
-		window.clear();
+		obj.sprite.setScale(
+			scene.getScale()/ (float)obj.texture->getSize().x,
+			scene.getScale()/ (float)obj.texture->getSize().y
+		);
+        window.clear();
+        window.drawScene(scene);
+        for(int x = 0; x < 10; ++x) {
+            obj.sprite.setPosition(
+                    sizeWindow - sf::Vector2f(scene.offset.x, -scene.offset.y) + scene.getPosition(sf::Vector2i(x, x)));
+            window.draw(obj);
+        }
 		window.draw(circle);
-		window.draw(obj);
-		window.drawScene(scene);
 		window.display();
 	}
 

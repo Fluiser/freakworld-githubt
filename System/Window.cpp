@@ -18,11 +18,19 @@ namespace Engine {
     {
         RenderWindow::draw(obj.sprite);
     }
+
+
+    /*
+     * Переписать сия чудо.
+     *
+     * Рендер избыточен и некорректен с высоким числом оффсета.
+     * И херня в принципе.
+     * */
     void Window::drawScene(const Scene::Scene& scene)
     {
         { // grid draw
-            sf::Vector2f size{(float)this->getSize().x, (float)this->getSize().y};
-            sf::Vector2f gridOffset {scene.offset.x, scene.offset.y};
+            sf::Vector2i size{(int)this->getSize().x, (int)this->getSize().y};
+            sf::Vector2i gridOffset {scene.offset.x, scene.offset.y};
             if(gridOffset.x > scene.scale)
                 gridOffset.x -= (float)((int)(gridOffset.x/scene.scale)) * scene.scale;
             if(gridOffset.y > scene.scale)
@@ -33,25 +41,32 @@ namespace Engine {
             if(gridOffset.y < scene.scale)
                 gridOffset.y -= (float)((int)(gridOffset.y/scene.scale)) * scene.scale;
 
-            DEB_LOG("GRID OFF: \n\t" << gridOffset.x << " - " << gridOffset.y << '\n');
 
-            float centrX = scale*2 + gridOffset.x + size.x/2;
-            float centrY = scale*2 + gridOffset.y + size.y/2;
+
+
+            DEB_LOG("GRID OFFSET: \n\t" << gridOffset.x << " - " << gridOffset.y << '\n');
+
+            float centrX = size.x/2 - gridOffset.x;
+            float centrY = size.y/2 + gridOffset.y;
+
             sf::Color color = sf::Color::Green;
-            color.a = scene.scale/300.0f*255.0f;
+            color.a = (unsigned char)(scene.scale/300.0f*255.0f);
 
-            drawLine(sf::Vector2f(0.0f, centrY), sf::Vector2f(size.x, centrY), color);
-            drawLine(sf::Vector2f(centrX, 0.0f), sf::Vector2f(centrX, size.y), color);
+            drawLine(sf::Vector2f(0.0f, centrY), sf::Vector2f((float)size.x, (float)centrY), color);
+            drawLine(sf::Vector2f(centrX, 0.0f), sf::Vector2f((float)centrX, (float)size.y), color);
 
-            for(float x = scene.scale; x <= centrX; x += scene.scale)
+            const float __endpoint_render__endx = centrX + scale*4;
+            const float __endpoint_render__endy = centrY + scale*4;
+
+            for(float x = scene.scale; x <= __endpoint_render__endx; x += scene.scale)
             {
-                drawLine(sf::Vector2f(centrX - x, 0.0f), sf::Vector2f(centrX - x, size.y), color);
-                drawLine(sf::Vector2f(centrX + x, 0.0f), sf::Vector2f(centrX + x, size.y), color);
+                drawLine(sf::Vector2f((float)(centrX - x), 0.0f), sf::Vector2f((float)(centrX - x), (float)size.y), color);
+                drawLine(sf::Vector2f((float)(centrX + x), 0.0f), sf::Vector2f((float)(centrX + x), (float)size.y), color);
             }
-            for(float y = scene.scale; y <= centrY; y += scene.scale)
+            for(float y = scene.scale; y <= __endpoint_render__endy; y += scene.scale)
             {
-                drawLine(sf::Vector2f(0.0f, centrY - y), sf::Vector2f(size.x, centrY - y), color);
-                drawLine(sf::Vector2f(0.0f, centrY + y), sf::Vector2f(size.x, centrY + y), color);
+                drawLine(sf::Vector2f(0.0f, (float)(centrY - y)), sf::Vector2f((float)size.x, (float)(centrY - y)), color);
+                drawLine(sf::Vector2f(0.0f, (float)(centrY + y)), sf::Vector2f((float)size.x, (float)(centrY + y)), color);
             }
         }
     }
