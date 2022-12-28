@@ -10,7 +10,7 @@ namespace Engine {
         inline void drawLine(const sf::Vector2f& s, const sf::Vector2f& e, sf::Color frogColor = sf::Color::Green);
 
     public:
-        float scale = 30.0;
+
 
 
         using RenderWindow::draw;
