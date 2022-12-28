@@ -56,7 +56,7 @@ namespace game_object {
 
     void Dynamic_Object::normalize(const Engine::Window& window, const Scene::Scene& scene)
     {
-	    sf::Vector2i windowSize(window.getSize().x/2, window.getSize().y/2);
+	    sf::Vector2i windowSize(window.getSize().x/2, window.getSize().y/2 + 1);
         this->sprite.setPosition(
                 (sf::Vector2f)windowSize - sf::Vector2f(scene.offset.x, -scene.offset.y) + scene.getPositionf(this->gpos)
                 );
@@ -70,7 +70,7 @@ namespace game_object {
     }
     void BoxForm::normalize(const Engine::Window& window, const Scene::Scene& scene)
     {
-	    sf::Vector2i windowSize(window.getSize().x/2, window.getSize().y/2);
+	    sf::Vector2i windowSize(window.getSize().x/2, window.getSize().y/2 + 1);
         this->sprite.setPosition(
                 (sf::Vector2f)windowSize - sf::Vector2f(scene.offset.x, -scene.offset.y) + scene.getPositionf(this->gpos)
                 );
@@ -115,13 +115,13 @@ namespace game_object {
 	    for(auto& box: this->form)
         {
 	        auto size = box.texture->getSize();
-	        box.sprite.setScale(scale / size.x, scale / size.x);
+	        box.sprite.setScale(scale / (size.x), scale / (size.y));
         }
     }
     void Dynamic_Object::setScale(float scale)
     {
         auto size = texture->getSize();
-        sprite.setScale(scale / size.x, scale / size.x);
+        sprite.setScale(scale / (size.x), scale / (size.y));
     }
 
 //	sf::Vector2f Object::getSize() const

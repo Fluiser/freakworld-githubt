@@ -41,7 +41,7 @@ namespace Scene {
 
         for (auto& ptr : this->objects)
         {
-            ptr->setScale( scale );
+            ptr->setScale( scale - 1.0f );
         }
     }
 
