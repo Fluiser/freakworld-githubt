@@ -48,7 +48,7 @@ int main()
 			if (event.type == sf::Event::Closed) return 0;
 			if(event.type == sf::Event::MouseWheelMoved)
 			{
-				scene.changeScale(window.scale*0.1*event.mouseWheel.delta);
+				scene.changeScale(scene.getScale()*0.1*event.mouseWheel.delta);
 			}
 			if(event.type == sf::Event::MouseButtonPressed)
 			{
