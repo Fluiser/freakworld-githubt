@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <memory>
 #include "../System/Util.cpp"
 #include "Object.h"
 
@@ -15,13 +16,13 @@ namespace Scene {
          * */
 
 
-        std::vector<game_object::Object> objects;
+        std::vector<std::unique_ptr<game_object::Object>> objects;
         float scale = 100.0;
 
         friend Engine::Window;
     
     protected:
-        inline int separateFloat(float n);
+        inline int separateFloat(float n) const;
     public:
         sf::Vector2i offset{0, 0};
 
@@ -43,12 +44,17 @@ namespace Scene {
         void insert(const V&);
 
         template<class T>
-        T& create();
+        T& create()
+        {
+            this->objects.emplace_back(std::make_unique<T>());
+            return *((T*)this->objects.back().get());
+        }
 
         game_object::Object* get(sf::Vector2i);
 
-        area_t getVisibleArea(sf::Vector2u);
-        sf::Vector2f getPosition(sf::Vector2i);
+        area_t getVisibleArea(sf::Vector2u) const;
+        sf::Vector2f getPositionf(sf::Vector2i) const;
+        sf::Vector2i getPositioni(sf::Vector2i p) const;
 
         void changeScale(float);
         void setScale(float);

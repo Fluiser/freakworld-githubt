@@ -9,6 +9,8 @@
 #include <exception>
 #include <iostream>
 #include <boost/stacktrace.hpp>
+#include "Scene.h"
+#include "../System/Window.h"
 
 #define ABSTRACT_MESSAGE_ERROR(function) function { \
 std::cout << "Call virtual function: " << #function << '\n'; \
@@ -22,10 +24,11 @@ namespace game_object {
 	Object::Object() {}
 	Object::~Object() {}
 	BoxForm::BoxForm() {}
-	bool BoxForm::canView(Math::vec2f scene_start, Math::vec2f scene_end) const 
+	bool BoxForm::canView(sf::Vector2f scene_start, sf::Vector2f scene_end) const
 	{
 		auto pos = sprite.getPosition();
-		auto size = sprite.getScale();
+		sf::Vector2f size(texture->getSize().x * sprite.getScale().x,
+                          texture->getSize().y * sprite.getScale().y);
 		Math::vec2f end{ pos.x + size.x, pos.y + size.y };
 		if (end.x < scene_start.x ||
 			end.y < scene_start.y) return false;
@@ -44,24 +47,97 @@ namespace game_object {
 	}
 		
 	//debug
-	ABSTRACT_MESSAGE_ERROR(bool Object::canView(Math::vec2f scene_start, Math::vec2f scene_end) const)
+	ABSTRACT_MESSAGE_ERROR(bool Object::canView(sf::Vector2f scene_start, sf::Vector2f scene_end) const)
 	ABSTRACT_MESSAGE_ERROR(bool Object::inObject(Math::vec2f) const)
-    ABSTRACT_MESSAGE_ERROR(void Object::render(Engine::Window&) const)
+    ABSTRACT_MESSAGE_ERROR(void Object::render(Engine::Window&, const Scene::Scene&) const)
+    ABSTRACT_MESSAGE_ERROR(	void Object::setScale(sf::Vector2f))
+    ABSTRACT_MESSAGE_ERROR(	void Object::setScale(float))
+    ABSTRACT_MESSAGE_ERROR(	void Object::normalize(const Engine::Window&, const Scene::Scene&))
 
-	sf::Vector2f Object::getSize() const
-	{
-		auto size = this->texture->getSize();
-		auto scale = this->sprite.getScale();
-		return sf::Vector2f{size.x * scale.x, size.y * scale.y};
-	}
+    void Dynamic_Object::normalize(const Engine::Window& window, const Scene::Scene& scene)
+    {
+	    sf::Vector2i windowSize(window.getSize().x/2, window.getSize().y/2);
+        this->sprite.setPosition(
+                (sf::Vector2f)windowSize - sf::Vector2f(scene.offset.x, -scene.offset.y) + scene.getPositionf(this->gpos)
+                );
+    }
+    void Static_Object::normalize(const Engine::Window& window, const Scene::Scene& scene)
+    {
+        for(auto& box: this->form)
+        {
+            box.normalize(window, scene);
+        }
+    }
+    void BoxForm::normalize(const Engine::Window& window, const Scene::Scene& scene)
+    {
+	    sf::Vector2i windowSize(window.getSize().x/2, window.getSize().y/2);
+        this->sprite.setPosition(
+                (sf::Vector2f)windowSize - sf::Vector2f(scene.offset.x, -scene.offset.y) + scene.getPositionf(this->gpos)
+                );
+    }
+
+    void Static_Object::render(Engine::Window& window, const Scene::Scene& scene) const
+    {
+        sf::Vector2f size((float)window.getSize().x, (float)window.getSize().y);
+        for(auto& box: this->form)
+        {
+            if (!box.canView(sf::Vector2f(0,0), size)) {
+                continue;
+            }
+            window.draw(box.sprite);
+        }
+    }
+    void Dynamic_Object::render(Engine::Window& window, const Scene::Scene& scene) const
+    {
+        {
+            sf::Vector2f size((float)window.getSize().x, (float)window.getSize().y);
+
+            if (!this->canView(sf::Vector2f(0,0), size))
+                return;
+        }
+        window.draw(this->sprite);
+    }
+
+    void Static_Object::setScale(sf::Vector2f vec)
+    {
+	    for(auto& box: this->form)
+        {
+	        box.sprite.setScale(vec);
+        }
+    }
+    void Dynamic_Object::setScale(sf::Vector2f vec)
+    {
+	    this->sprite.setScale(vec);
+    }
+
+    void Static_Object::setScale(float scale)
+    {
+	    for(auto& box: this->form)
+        {
+	        auto size = box.texture->getSize();
+	        box.sprite.setScale(scale / size.x, scale / size.x);
+        }
+    }
+    void Dynamic_Object::setScale(float scale)
+    {
+        auto size = texture->getSize();
+        sprite.setScale(scale / size.x, scale / size.x);
+    }
+
+//	sf::Vector2f Object::getSize() const
+//	{
+//		auto size = this->texture->getSize();
+//		auto scale = this->sprite.getScale();
+//		return sf::Vector2f{size.x * scale.x, size.y * scale.y};
+//	}
 
 
 	//end debug section
 
 	Static_Object::Static_Object(): Object() {}
-	bool Static_Object::canView(Math::vec2f scene_start, Math::vec2f scene_end) const 
+	bool Static_Object::canView(sf::Vector2f scene_start, sf::Vector2f scene_end) const
 	{
-		for(const auto& box: *form)
+		for(const auto& box: form)
 		{
 			if(box.canView(scene_start, scene_end)) return true;
 		}
@@ -70,7 +146,7 @@ namespace game_object {
 
 	bool Static_Object::inObject(Math::vec2f vec)
 	{
-		for(const auto& box: *this->form)
+		for(const auto& box: this->form)
 		{
 			if(box.inObject(vec)) return true;
 		}
@@ -79,7 +155,20 @@ namespace game_object {
 
 	Dynamic_Object::Dynamic_Object(): Object() {}
 
-	bool Dynamic_Object::canView(Math::vec2f scene_start, Math::vec2f scene_end) const
+    sf::Vector2f Dynamic_Object::getSize() const
+    {
+        auto s = this->sprite.getScale();
+        auto size = this->texture->getSize();
+        return sf::Vector2f((float)(size.x * s.x), (float)(size.y * s.y));
+    }
+    sf::Vector2f BoxForm::getSize() const
+    {
+        auto s = this->sprite.getScale();
+        auto size = this->texture->getSize();
+        return sf::Vector2f((float)(size.x * s.x), (float)(size.y * s.y));
+    }
+
+	bool Dynamic_Object::canView(sf::Vector2f scene_start, sf::Vector2f scene_end) const
 	{
 		auto pos = this->sprite.getPosition();
 		auto size = this->getSize();

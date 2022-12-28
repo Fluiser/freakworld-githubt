@@ -12,8 +12,8 @@ namespace Scene {
     template<typename V, typename V::Object T>
     void Scene::insert(const V& obj)
     {
-        ((V)this->objects).emplace_back();
-        auto& o = objects.back();
+        ((V)this->objects).emplace_back(std::make_unique<V>());
+        auto& o = *objects.back();
         o.gpos = obj.gpos;
         o.texture = obj.texture;
 
@@ -23,41 +23,39 @@ namespace Scene {
 
     game_object::Object get(sf::Vector2i);
 
-    template<class T>
-    T& Scene::create()
-    {
-        ((std::vector<T>)this->objects).emplace_back();
-        return (T)this->objects.back();
-    }
-
     void Scene::setScale(float s)
     {
         if(s > 254)
         {
-            scale = 254.0f;
+            setScale(254.0f);
             return;
         }
-        if(s < 0.1)
+        if(s < 30)
         {
-            scale = 0.1f;
+            setScale(30);
             return;
         }
-        offset.x = offset.x/scale*s;
-        offset.y = offset.y/scale*s;
+        offset.x = (int)((float)offset.x/scale*s);
+        offset.y = (int)((float)offset.y/scale*s);
         scale = s;
+
+        for (auto& ptr : this->objects)
+        {
+            ptr->setScale( scale );
+        }
     }
 
     game_object::Object* Scene::get(sf::Vector2i v)
     {
         for (auto& obj : this->objects)
         {
-            if (obj.gpos.x == v.x && obj.gpos.y == v.y)
-                return &obj;
+            if (obj->gpos.x == v.x && obj->gpos.y == v.y)
+                return &(*obj);
         }
         return nullptr;
     }
 
-    int Scene::separateFloat(float n)
+    int Scene::separateFloat(float n) const
     {
         return n >= 0 ?
             (float)((int)n) < n ?
@@ -67,16 +65,24 @@ namespace Scene {
                 (int)(n - 1) : (int)n;
     }
 
-    sf::Vector2f Scene::getPosition(sf::Vector2i p)
+    sf::Vector2f Scene::getPositionf(sf::Vector2i p) const
     {
 
         return sf::Vector2f(
-            (((float)p.x) * (scale)),
-            (((float)-p.y) * (scale))
+                (((float)p.x) * (scale)),
+                (((float)-p.y) * (scale))
+        );
+    }
+    sf::Vector2i Scene::getPositioni(sf::Vector2i p) const
+    {
+
+        return sf::Vector2i(
+                (((float)p.x) * (scale)),
+                (((float)-p.y) * (scale))
         );
     }
 
-    Scene::area_t Scene::getVisibleArea(sf::Vector2u visibleArea)
+    Scene::area_t Scene::getVisibleArea(sf::Vector2u visibleArea) const
     {
         return area_t{
             sf::Vector2i(   Scene::separateFloat(((float)visibleArea.x/2)/scale ),
@@ -98,4 +104,6 @@ namespace Scene {
         float nscale = scale + s;
         this->setScale(nscale);
     }
+
+
 };
