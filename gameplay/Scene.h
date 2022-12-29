@@ -40,9 +40,6 @@ namespace Scene {
 
         Scene(type_t);
 
-        template<typename V, typename V::Object T>
-        void insert(const V&);
-
         template<class T>
         T& create()
         {

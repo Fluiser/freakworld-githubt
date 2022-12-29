@@ -9,18 +9,6 @@ namespace Scene {
 
     }
 
-    template<typename V, typename V::Object T>
-    void Scene::insert(const V& obj)
-    {
-        ((V)this->objects).emplace_back(std::make_unique<V>());
-        auto& o = *objects.back();
-        o.gpos = obj.gpos;
-        o.texture = obj.texture;
-
-        if(o.texture)
-            o.sprite.setTexture(*o.texture);
-    }
-
     game_object::Object get(sf::Vector2i);
 
     void Scene::setScale(float s)

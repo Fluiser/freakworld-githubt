@@ -12,7 +12,7 @@
 
 int main()
 {
-	Engine::Window window(sf::VideoMode(1280, 720), "Hope has left this project");
+	Engine::Window window(sf::VideoMode(1280, 720), "fuck");
 	sf::Event event;
 	
 	sf::RectangleShape shape({200, 200});
@@ -38,9 +38,9 @@ int main()
 
 	decltype(auto) obj = scene.create< game_object::Static_Object >();
 
-	for(int i = 0; i < 1; ++i)
+	for(int i = 0; i < 3; ++i)
     {
-        for(int j = 0; j < 1; ++j)
+        for(int j = 0; j < 2; ++j)
         {
             std::string path = "box";
             path += std::to_string(i+j);
