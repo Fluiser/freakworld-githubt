@@ -5,28 +5,28 @@
 #include <iostream>
 
 namespace Engine {
-    class Window: public sf::RenderWindow {
+	class Window: public sf::RenderWindow {
 
-        inline void drawLine(const sf::Vector2f& s, const sf::Vector2f& e, sf::Color frogColor = sf::Color::Green);
+		inline void drawLine(const sf::Vector2f& s, const sf::Vector2f& e, sf::Color frogColor = sf::Color::Green);
 
-    public:
-        float scale = 30.0;
+	public:
+		float scale = 30.0;
 
-        using RenderWindow::draw;
+		using RenderWindow::draw;
 
-        Window(): RenderWindow()
-        {
+		Window(): RenderWindow()
+		{
 
-        }
-        template<class... Args>
-        Window(Args... args): RenderWindow(args...)
-        {
+		}
+		template<class... Args>
+		Window(Args... args): RenderWindow(args...)
+		{
 
-        }
+		}
 
-        void draw(const Engine::Objects::Object& obj, const Scene::Scene& scene);
-        void drawScene(const Scene::Scene&);
-        void changeScale(float);
+		void draw(const Engine::Objects::Object& obj, const Scene::Scene& scene);
+		void drawScene(const Scene::Scene&);
+		void changeScale(float);
 
-    };
+	};
 }

@@ -14,7 +14,7 @@ namespace Engine
 {
 	class Window;
 
-    namespace Objects {
+	namespace Objects {
 
 	//information about object
 	//stuctured like a hit-boxes.

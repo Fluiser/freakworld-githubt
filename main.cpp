@@ -39,20 +39,20 @@ int main()
 	decltype(auto) obj = scene.create< Engine::Objects::Static_Object >();
 
 	for(int i = 0; i < 3; ++i)
-    {
-        for(int j = 0; j < 2; ++j)
-        {
-            std::string path = "box";
-            path += std::to_string(i+j);
-            path += ".png";
-            std::shared_ptr<sf::Texture> texture(std::make_shared<sf::Texture>());
-            texture->loadFromFile(path);
-            obj.form.emplace_back();
-            obj.form.back().texture = texture;
-            obj.form.back().sprite.setTexture(*texture);
-            obj.form.back().gpos = {j, i};
-        }
-    }
+	{
+		for(int j = 0; j < 2; ++j)
+		{
+			std::string path = "box";
+			path += std::to_string(i+j);
+			path += ".png";
+			std::shared_ptr<sf::Texture> texture(std::make_shared<sf::Texture>());
+			texture->loadFromFile(path);
+			obj.form.emplace_back();
+			obj.form.back().texture = texture;
+			obj.form.back().sprite.setTexture(*texture);
+			obj.form.back().gpos = {j, i};
+		}
+	}
 
 	scene.setScale(scene.getScale());
 
@@ -100,8 +100,8 @@ int main()
 			}
 		}
 		std::cout << "OFFSET : " << scene.offset.x << " " << scene.offset.y << "\n";
-        window.clear();
-        window.drawScene(scene);
+		window.clear();
+		window.drawScene(scene);
 		window.draw(circle);
 		window.display();
 	}

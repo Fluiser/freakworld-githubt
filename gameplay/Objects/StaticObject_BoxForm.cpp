@@ -7,7 +7,7 @@ namespace Engine
     namespace Objects {
 		BoxForm::BoxForm() {}
 
-        void BoxForm::normalize(const Engine::Window& window, const Scene::Scene& scene)
+		void BoxForm::normalize(const Engine::Window& window, const Scene::Scene& scene)
 		{
 			sf::Vector2i windowSize(window.getSize().x/2, window.getSize().y/2 + 1);
 			this->sprite.setPosition(
@@ -15,7 +15,7 @@ namespace Engine
 					);
 		}
 
-        bool BoxForm::canView(sf::Vector2f scene_start, sf::Vector2f scene_end) const
+		bool BoxForm::canView(sf::Vector2f scene_start, sf::Vector2f scene_end) const
 		{
 			auto pos = sprite.getPosition();
 			sf::Vector2f size(texture->getSize().x * sprite.getScale().x,

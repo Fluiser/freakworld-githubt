@@ -20,7 +20,7 @@ _exit(-10); }
 
 namespace Engine 
 {
-    namespace Objects {
+	namespace Objects {
 
 		//information about object
 		//stuctured like a hit-boxes.

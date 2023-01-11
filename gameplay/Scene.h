@@ -5,57 +5,57 @@
 #include "Objects.h"
 
 namespace Engine {
-    class Window;
+	class Window;
 }
 
 namespace Scene {
-    class Scene {
-        /*
-         * Сцена - область из клеток.
-         * Нуль-точка - Середина.(нахуя)
-         * */
+	class Scene {
+		/*
+		 * Сцена - область из клеток.
+		 * Нуль-точка - Середина.(нахуя)
+		 * */
 
 
-        std::vector<std::unique_ptr<Engine::Objects::Object>> objects;
-        float scale = 100.0;
+		std::vector<std::unique_ptr<Engine::Objects::Object>> objects;
+		float scale = 100.0;
 
-        friend Engine::Window;
-    
-    protected:
-        inline int separateFloat(float n) const;
-    public:
-        sf::Vector2i offset{0, 0};
+		friend Engine::Window;
+	
+	protected:
+		inline int separateFloat(float n) const;
+	public:
+		sf::Vector2i offset{0, 0};
 
-        struct area_t {
-            sf::Vector2i start;
-            sf::Vector2i end;
-        };
+		struct area_t {
+			sf::Vector2i start;
+			sf::Vector2i end;
+		};
 
 
-        enum type_t {
-            INFINITY_GENERATION,
-            FIXED,
-            DYNAMIC_SCENE
-        } type;
+		enum type_t {
+			INFINITY_GENERATION,
+			FIXED,
+			DYNAMIC_SCENE
+		} type;
 
-        Scene(type_t);
+		Scene(type_t);
 
-        template<class T>
-        T& create()
-        {
-            this->objects.emplace_back(std::make_unique<T>());
-            return *((T*)this->objects.back().get());
-        }
+		template<class T>
+		T& create()
+		{
+			this->objects.emplace_back(std::make_unique<T>());
+			return *((T*)this->objects.back().get());
+		}
 
-        Engine::Objects::Object* get(sf::Vector2i);
+		Engine::Objects::Object* get(sf::Vector2i);
 
-        area_t getVisibleArea(sf::Vector2u) const;
-        sf::Vector2f getPositionf(sf::Vector2i) const;
-        sf::Vector2i getPositioni(sf::Vector2i p) const;
+		area_t getVisibleArea(sf::Vector2u) const;
+		sf::Vector2f getPositionf(sf::Vector2i) const;
+		sf::Vector2i getPositioni(sf::Vector2i p) const;
 
-        void changeScale(float);
-        void setScale(float);
+		void changeScale(float);
+		void setScale(float);
 
-        const float& getScale() const noexcept;
-    };
+		const float& getScale() const noexcept;
+	};
 };
