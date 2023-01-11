@@ -9,7 +9,6 @@ namespace Scene {
 
     }
 
-    game_object::Object get(sf::Vector2i);
 
     void Scene::setScale(float s)
     {
@@ -33,7 +32,7 @@ namespace Scene {
         }
     }
 
-    game_object::Object* Scene::get(sf::Vector2i v)
+    Engine::Objects::Object* Scene::get(sf::Vector2i v)
     {
         for (auto& obj : this->objects)
         {

@@ -1,5 +1,5 @@
 #include "System/Window.h"
-#include "gameplay/Object.h"
+#include "gameplay/Objects.h"
 #include "gameplay/Scene.h"
 #include <iostream>
 #include <thread>
@@ -36,7 +36,7 @@ int main()
 
 	//DEB_LOG("\n\n" << scene.getScale()/ (float)obj.texture->getSize().x << "\n" << scene.getScale()/ (float)obj.texture->getSize().y << "\n\n");
 
-	decltype(auto) obj = scene.create< game_object::Static_Object >();
+	decltype(auto) obj = scene.create< Engine::Objects::Static_Object >();
 
 	for(int i = 0; i < 3; ++i)
     {

@@ -2,7 +2,7 @@
 #include <vector>
 #include <memory>
 #include "../System/Util.cpp"
-#include "Object.h"
+#include "Objects.h"
 
 namespace Engine {
     class Window;
@@ -16,7 +16,7 @@ namespace Scene {
          * */
 
 
-        std::vector<std::unique_ptr<game_object::Object>> objects;
+        std::vector<std::unique_ptr<Engine::Objects::Object>> objects;
         float scale = 100.0;
 
         friend Engine::Window;
@@ -47,7 +47,7 @@ namespace Scene {
             return *((T*)this->objects.back().get());
         }
 
-        game_object::Object* get(sf::Vector2i);
+        Engine::Objects::Object* get(sf::Vector2i);
 
         area_t getVisibleArea(sf::Vector2u) const;
         sf::Vector2f getPositionf(sf::Vector2i) const;

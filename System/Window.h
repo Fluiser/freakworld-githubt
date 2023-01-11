@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../gameplay/Object.h"
+#include <gameplay/Objects.h>
 #include "../gameplay/Scene.h"
 #include <iostream>
 
@@ -24,7 +24,7 @@ namespace Engine {
 
         }
 
-        void draw(const game_object::Object& obj, const Scene::Scene& scene);
+        void draw(const Engine::Objects::Object& obj, const Scene::Scene& scene);
         void drawScene(const Scene::Scene&);
         void changeScale(float);
 

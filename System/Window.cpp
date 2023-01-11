@@ -14,7 +14,7 @@ namespace Engine {
         RenderWindow::draw(lines);
     }
 
-    void Window::draw(const game_object::Object& obj, const Scene::Scene& scene)
+    void Window::draw(const Engine::Objects::Object& obj, const Scene::Scene& scene)
     {
         obj.render(*this, scene);
     }
