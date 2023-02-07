@@ -2,12 +2,6 @@
 #include <math.h>
 #include <stdint.h>
 
-#ifdef DEBUG
-#define DEB_LOG(x) std::cout << x
-#else
-#define DEB_LOG(x)
-#endif
-
 namespace Math {
 	template<class T>
 	class vec2 {

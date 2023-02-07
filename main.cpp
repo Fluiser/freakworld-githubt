@@ -4,11 +4,13 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <Gameplay/Player.h>
 
 /*
  * Нахуй векторы sfml.
  * Надо будет переделать.
  * */
+
 
 int main()
 {
@@ -28,7 +30,7 @@ int main()
 		sf::Vector2i pos;
 	} last_point;
 
-	Scene::Scene scene(Scene::Scene::type_t::DYNAMIC_SCENE);
+	Scene::Scene scene(Scene::Scene::type_t::DYNAMIC_SCENE, window.getSize());
 
 	sf::Vector2f sizeWindow( window.getSize().x/2.0f, window.getSize().y/2.0f  );
 
@@ -37,6 +39,12 @@ int main()
 	//DEB_LOG("\n\n" << scene.getScale()/ (float)obj.texture->getSize().x << "\n" << scene.getScale()/ (float)obj.texture->getSize().y << "\n\n");
 
 	decltype(auto) obj = scene.create< Engine::Objects::Static_Object >();
+	decltype(auto) path_obj = scene.create< Engine::Objects::Dynamic_Object >();
+	
+	path_obj.texture = std::make_shared<sf::Texture>();
+	path_obj.texture->loadFromFile("red.png");
+	path_obj.sprite.setTexture(*path_obj.texture);
+	
 
 	for(int i = 0; i < 3; ++i)
 	{
@@ -55,7 +63,7 @@ int main()
 	}
 
 	scene.setScale(scene.getScale());
-
+	sf::Vector2i vec_mouse;
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
@@ -67,6 +75,9 @@ int main()
 			}
 			if(event.type == sf::Event::MouseButtonPressed)
 			{
+				vec_mouse = path_obj.gpos = scene.getVirtualPos(
+					(sf::Vector2f)sf::Mouse::getPosition(window) + sf::Vector2f(scene.offset.x, -scene.offset.y)
+				);
 				if(!last_point.filled)
 				{
 					last_point.pos = sf::Mouse::getPosition(window);
@@ -99,9 +110,23 @@ int main()
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) return 0;
 			}
 		}
-		std::cout << "OFFSET : " << scene.offset.x << " " << scene.offset.y << "\n";
+		//std::cout << "OFFSET : " << scene.offset.x << " " << scene.offset.y << "\n";
 		window.clear();
 		window.drawScene(scene);
+		std::vector<sf::Vector2i>&& vpath(Gameplay::constructPath(sf::Vector2i(0, 0), vec_mouse, scene, 10));
+		//std::cout << vpath.size() << " <" << vec_mouse.x << "; " << vec_mouse.y << ">\n";
+		if (vpath.size() > 0)
+		{
+			path_obj.gpos = vec_mouse;
+			path_obj.normalize(window, scene);
+			window.draw(path_obj, scene);
+			for (auto pos : vpath)
+			{
+				path_obj.gpos = pos;
+				path_obj.normalize(window, scene);
+				window.draw(path_obj, scene);
+			}
+		}
 		window.draw(circle);
 		window.display();
 	}

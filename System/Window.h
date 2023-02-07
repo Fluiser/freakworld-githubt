@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <gameplay/Objects.h>
-#include "../gameplay/Scene.h"
+#include <Gameplay/Objects.h>
+#include "../Gameplay/Scene.h"
 #include <iostream>
 
 namespace Engine {
@@ -13,6 +13,7 @@ namespace Engine {
 		float scale = 30.0;
 
 		using RenderWindow::draw;
+		using RenderWindow::getSize;
 
 		Window(): RenderWindow()
 		{

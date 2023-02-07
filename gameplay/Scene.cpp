@@ -1,10 +1,12 @@
 #pragma once
 #include <iostream>
+#include <math.h>
 #include "Scene.h"
 
 namespace Scene {
-	Scene::Scene::Scene(type_t t):
-	type(t)
+	Scene::Scene::Scene(type_t t, sf::Vector2u ws):
+	type(t),
+	windowSize(ws)
 	{
 
 	}
@@ -32,6 +34,16 @@ namespace Scene {
 		}
 	}
 
+	sf::Vector2i Scene::getVirtualPos(sf::Vector2f pos) const
+	{
+		std::cout << "pos: <" << pos.x << "; " << pos.y << ">\n";
+		pos.x -= (windowSize.x/2);
+		pos.y -= (windowSize.y/2);
+		pos.x /= scale;
+		pos.y /= -scale;
+		return sf::Vector2i(ceil(pos.x - 1), ceil(pos.y));
+	}
+
 	Engine::Objects::Object* Scene::get(sf::Vector2i v)
 	{
 		for (auto& obj : this->objects)
@@ -51,6 +63,8 @@ namespace Scene {
 			(float)((int)n) > n ?
 				(int)(n - 1) : (int)n;
 	}
+
+
 
 	sf::Vector2f Scene::getPositionf(sf::Vector2i p) const
 	{

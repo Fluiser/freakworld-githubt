@@ -9,14 +9,16 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /DDEBUG=TRUE /std:c++17")
 set(INCLUDE_DIR "D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include")
 
 
-add_executable(freakWorld main.cpp 
+add_executable(freakWorld
 		gameplay/Objects/Object.h 			gameplay/Objects/Object.cpp
 		gameplay/Objects/Dynamic_Object.h 	gameplay/Objects/Dynamic_Object.cpp
 		gameplay/Objects/Static_Object.h 	gameplay/Objects/Static_Object.cpp 
 											gameplay/Objects/StaticObject_BoxForm.cpp
 		gameplay/Scene.h 					gameplay/Scene.cpp
+		gameplay/Player.h					gameplay/Player.cpp
 		System/Window.h System/Window.cpp
-)
+		main.cpp
+ "System/util.hpp")
 
 #libs
 set(Boost_INCLUDE_DIR "D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include")
