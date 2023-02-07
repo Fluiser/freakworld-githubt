@@ -36,7 +36,6 @@ namespace Scene {
 
 	sf::Vector2i Scene::getVirtualPos(sf::Vector2f pos) const
 	{
-		std::cout << "pos: <" << pos.x << "; " << pos.y << ">\n";
 		pos.x -= (windowSize.x/2);
 		pos.y -= (windowSize.y/2);
 		pos.x /= scale;
