@@ -39,5 +39,13 @@ set(SFML_STATIC_LIBRARIES TRUE)
 
 target_link_libraries(freakWorld sfml-graphics sfml-audio sfml-window sfml-system ${Boost_LIBRARIES})
 
+if (WIN32)
+# Now not need.
+endif(WIN32)
+
+if (UNIX)
+	add_compile_definitions(LINUX=TRUE)
+endif(UNIX)
+
 #///
 include_directories(${INCLUDE_DIR} ./)
