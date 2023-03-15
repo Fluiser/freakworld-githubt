@@ -17,8 +17,7 @@ add_executable(freakWorld
 		gameplay/Scene.h 					gameplay/Scene.cpp
 		gameplay/Player.h					gameplay/Player.cpp
 		System/Window.h System/Window.cpp
-		main.cpp
- "System/util.hpp")
+		main.cpp)
 
 #libs
 set(Boost_INCLUDE_DIR "D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include")
