@@ -1,5 +1,5 @@
 #include "Window.h"
-#include "./Util.cpp"
+#include "./Util.hpp"
 #pragma once
 
 namespace Engine {

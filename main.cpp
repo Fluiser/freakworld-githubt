@@ -1,10 +1,11 @@
 #include "System/Window.h"
-#include "gameplay/Objects.h"
-#include "gameplay/Scene.h"
+#include "Gameplay/Objects.h"
+#include "Gameplay/Scene.h"
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <Gameplay/Player.h>
+#include <System/Handlers.h>
 
 /*
  * Нахуй векторы sfml.
@@ -14,6 +15,8 @@
 
 int main()
 {
+	init_handlers();
+
 	Engine::Window window(sf::VideoMode(1280, 720), "fuck");
 	sf::Event event;
 	
@@ -41,6 +44,11 @@ int main()
 	decltype(auto) obj = scene.create< Engine::Objects::Static_Object >();
 	decltype(auto) path_obj = scene.create< Engine::Objects::Dynamic_Object >();
 	
+	if(!obj.clip){
+		std::cout << "what the fuck";
+	return 1;
+	}
+
 	path_obj.texture = std::make_shared<sf::Texture>();
 	path_obj.texture->loadFromFile("red.png");
 	path_obj.sprite.setTexture(*path_obj.texture);
@@ -58,12 +66,32 @@ int main()
 			obj.form.emplace_back();
 			obj.form.back().texture = texture;
 			obj.form.back().sprite.setTexture(*texture);
-			obj.form.back().gpos = {j, i};
+			obj.form.back().gpos = {j+1, i+1};
 		}
 	}
 
 	scene.setScale(scene.getScale());
 	sf::Vector2i vec_mouse;
+
+	float fps = 0;
+
+	std::thread fpsCalc([&] {
+		sf::Clock timer;
+		int timerMS;
+		while(window.isOpen())
+		{
+			if( (timerMS = timer.getElapsedTime().asMilliseconds()) >= 1000)
+			{
+				float fpsPS = fps * (1000.0f/((float)timerMS));
+				fps = 0;
+				timer.restart();
+				std::cout << "FPS: " << fpsPS << "\n";
+			} else {
+				std::this_thread::sleep_for(std::chrono::milliseconds(1000 - timerMS));
+			}
+		}
+	});
+
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
@@ -113,10 +141,11 @@ int main()
 		//std::cout << "OFFSET : " << scene.offset.x << " " << scene.offset.y << "\n";
 		window.clear();
 		window.drawScene(scene);
-		std::vector<sf::Vector2i>&& vpath(Gameplay::constructPath(sf::Vector2i(0, 0), vec_mouse, scene, 10));
+		std::vector<sf::Vector2i> vpath = Gameplay::constructPath(sf::Vector2i(0, 0), vec_mouse, scene, 10);
 		//std::cout << vpath.size() << " <" << vec_mouse.x << "; " << vec_mouse.y << ">\n";
 		if (vpath.size() > 0)
 		{
+			// std::cout << "Достигаем\n";
 			path_obj.gpos = vec_mouse;
 			path_obj.normalize(window, scene);
 			window.draw(path_obj, scene);
@@ -126,9 +155,12 @@ int main()
 				path_obj.normalize(window, scene);
 				window.draw(path_obj, scene);
 			}
+		} else {
+			//std::cout << "Недостигаем.\n";
 		}
 		window.draw(circle);
 		window.display();
+		fps += 1.0f;
 	}
 
 	return 0;
