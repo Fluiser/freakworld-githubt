@@ -80,18 +80,6 @@ namespace Scene {
 
 			__iterator operator++()
 			{
-				// if(src1 != _scene->_static_objects.end()) {
-				// 	++src1_iter;
-				// 	if(src1_iter == src1->second.end())
-				// 	{
-				// 		++src1;
-				// 		if (src1 == _scene->_static_objects.end()) return ++(*this);
-				// 		src1_iter = src1->second.begin();
-				// 		if(src1_iter == src1->second.end())
-				// 			return (++(*this));
-				// 	}
-				// 	return (*this);
-				// }
 				if(src1 != _scene->_static_objects.end()) {
 					++src1_iter;
 					if(src1_iter == src1->second.end()) {
