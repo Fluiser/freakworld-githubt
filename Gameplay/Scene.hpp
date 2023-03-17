@@ -23,7 +23,7 @@ namespace Engine {
 				Gameplay::Objects::SomeObject.normalize() -> .render(Window, Scene)
  
  *
- *
+ * 
  * Возможно что-то ещё, но я уже забыл.
  * 
  */
@@ -80,17 +80,26 @@ namespace Scene {
 
 			__iterator operator++()
 			{
+				// if(src1 != _scene->_static_objects.end()) {
+				// 	++src1_iter;
+				// 	if(src1_iter == src1->second.end())
+				// 	{
+				// 		++src1;
+				// 		if (src1 == _scene->_static_objects.end()) return ++(*this);
+				// 		src1_iter = src1->second.begin();
+				// 		if(src1_iter == src1->second.end())
+				// 			return (++(*this));
+				// 	}
+				// 	return (*this);
+				// }
 				if(src1 != _scene->_static_objects.end()) {
 					++src1_iter;
-					if(src1_iter == src1->second.end())
-					{
-						++src1;
-						if (src1 == _scene->_static_objects.end()) return ++(*this);
-						src1_iter = src1->second.begin();
-						if(src1_iter == src1->second.end())
-							return (++(*this));
+					if(src1_iter == src1->second.end()) {
+						src1++;
+						if(src1 == _scene->_static_objects.end()) return (*this);
+						else src1_iter = src1->second.begin();
+						return (*this);
 					}
-					return (*this);
 				}
 				if(src2 != _scene->_dynamic_objects.end()) {
 					++src2;
@@ -155,9 +164,10 @@ namespace Scene {
 		// }
 		
 		template<class T = Engine::Objects::Object>
+
 		std::list<T>* get(sf::Vector2i); // Разделять объекты по map'aм // Почти тоже, что и map, но с коллизией
 		
-		template<class T>
+		template<class T> 
 		std::list<T>* find(sf::Vector2i); // find - сравнивает позиции точно.
 
 		area_t getVisibleArea(sf::Vector2u) const;
