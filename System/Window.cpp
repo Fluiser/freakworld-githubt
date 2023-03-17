@@ -14,7 +14,7 @@ namespace Engine {
 		RenderWindow::draw(lines);
 	}
 
-	void Window::draw(const Engine::Objects::Object& obj, const Scene::Scene& scene)
+	void Window::draw(const Engine::Objects::Object& obj, Scene::Scene& scene)
 	{
 		obj.render(*this, scene);
 	}
@@ -29,7 +29,7 @@ namespace Engine {
 	 * Рендер туфта. Либо используем double и плачем, либо плачем и рыдаем, и переделываем.
 	 * Я - я и я. Вот это мы!
 	 * */
-	void Window::drawScene(const Scene::Scene& scene)
+	void Window::drawScene( Scene::Scene& scene)
 	{
 		{ // grid draw
 			sf::Vector2i size{(int)this->getSize().x, (int)this->getSize().y};
@@ -72,7 +72,7 @@ namespace Engine {
 			}
 		}
 
-		for (auto& ptr : scene.objects)
+		for (auto ptr : scene)
 		{
 			ptr->normalize(*this, scene);
 			ptr->render(*this, scene);

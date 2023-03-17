@@ -1,6 +1,6 @@
 #include "System/Window.h"
 #include "Gameplay/Objects.h"
-#include "Gameplay/Scene.h"
+#include "Gameplay/Scene.hpp"
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -41,8 +41,8 @@ int main()
 
 	//DEB_LOG("\n\n" << scene.getScale()/ (float)obj.texture->getSize().x << "\n" << scene.getScale()/ (float)obj.texture->getSize().y << "\n\n");
 
-	decltype(auto) obj = scene.create< Engine::Objects::Static_Object >();
-	decltype(auto) path_obj = scene.create< Engine::Objects::Dynamic_Object >();
+	auto& obj = scene.create< Engine::Objects::Static_Object >({0,0});
+	auto& path_obj = scene.create< Engine::Objects::Dynamic_Object >({255,255});
 	
 	if(!obj.clip){
 		std::cout << "what the fuck";

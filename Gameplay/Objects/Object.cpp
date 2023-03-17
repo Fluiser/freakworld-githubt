@@ -7,7 +7,7 @@
 #include <exception>
 #include <iostream>
 #include <boost/stacktrace.hpp>
-#include <Gameplay/Scene.h>
+#include <Gameplay/Scene.hpp>
 #include <System/Window.h>
 #include <System/Util.hpp>
 

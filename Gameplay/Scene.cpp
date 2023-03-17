@@ -1,16 +1,28 @@
 #pragma once
 #include <iostream>
 #include <math.h>
-#include "Scene.h"
+#include "Scene.hpp"
+#include <boost/stacktrace.hpp>
 
 namespace Scene {
 	Scene::Scene::Scene(type_t t, sf::Vector2u ws):
 	type(t),
-	windowSize(ws)
+	windowSize(ws),
+	_static_objects(),
+	_dynamic_objects()
 	{
 
 	}
 
+	Scene::__iterator Scene::begin()
+	{
+		*_dynamic_objects.begin();
+		return __iterator(_static_objects.begin(), _dynamic_objects.begin(), this);
+	}
+	Scene::__iterator Scene::end()
+	{
+		return __iterator(_static_objects.end(), _dynamic_objects.end(), this);
+	}
 
 	void Scene::setScale(float s)
 	{
@@ -28,7 +40,9 @@ namespace Scene {
 		offset.y = (int)((float)offset.y/scale*s);
 		scale = s;
 
-		for (auto& ptr : this->objects)
+		auto& _this = *this;
+
+		for (auto* ptr: (_this))
 		{
 			ptr->setScale( scale - 1.0f );
 		}
@@ -43,16 +57,65 @@ namespace Scene {
 		return sf::Vector2i(ceil(pos.x - 1), ceil(pos.y));
 	}
 
-	template<>
-	Engine::Objects::Object* Scene::get(sf::Vector2i v)
+	template<class T>
+	T& Scene::create(sf::Vector2i)
 	{
-		for (auto& obj : this->objects)
-		{
-			if (obj->gpos.x == v.x && obj->gpos.y == v.y)
-				return &(*obj);
-		}
-		return nullptr;
+		std::cout << "Use Scene::create with template T: " << typeid(T).name() << "\n" << boost::stacktrace::stacktrace() << "\n";
+		exit(-10);
 	}
+
+	template<>
+	Engine::Objects::Static_Object& Scene::create(sf::Vector2i vec)
+	{
+		int idx = Scene::calcIdx(vec);
+		if(_static_objects.count(idx) > 0) {
+			_static_objects.insert({idx, decltype(_static_objects)::value_type::second_type()});
+		}
+		_static_objects[idx].emplace_back();
+		return _static_objects[idx].back();
+	}
+	
+	template<>
+	Engine::Objects::Dynamic_Object& Scene::create(sf::Vector2i vec)
+	{
+		_dynamic_objects.emplace_back();
+		return _dynamic_objects.back();
+	}
+
+	template<>
+	std::list<Engine::Objects::Static_Object>* Scene::get(sf::Vector2i v)
+	{
+		int idx = Scene::calcIdx(v);
+		if(_static_objects.count(idx) > 0) 
+			return (&_static_objects[idx]);
+	}
+
+	template<>
+	std::list<Engine::Objects::Object>* Scene::get(sf::Vector2i v)
+	{
+		return (std::list<Engine::Objects::Object>*)
+				(this->get<Engine::Objects::Static_Object>(v));
+	}
+
+
+	// template<>
+	// std::list<Engine::Objects::Static_Object>* Scene::find(sf::Vector2i vec)
+	// {
+	// 	for(auto& pair: _static_objects)
+	// 	{
+	// 		if(pair.second.size() && pair.second.front().gpos == vec)
+	// 			return (&pair.second);
+	// 	}
+	// 	return nullptr;
+	// }
+
+	// template<>
+	// std::list<Engine::Objects::Object>* Scene::find(sf::Vector2i vec)
+	// {
+	// 	return 	(std::list<Engine::Objects::Object>*)
+	// 			(this->find<Engine::Objects::Static_Object>(vec) || 
+	// 			this->find<Engine::Objects::Dynamic_Object>(vec) );
+	// }
 
 	int Scene::separateFloat(float n) const
 	{

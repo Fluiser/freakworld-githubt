@@ -2,10 +2,18 @@
 #include <stdint.h>
 #include <System/Range.hpp>
 #define DEBUG
+#include <Gameplay/Objects/Static_Object.h>
 #include <System/Util.hpp>
 
 namespace {
-
+    bool _objectsCannotClip(const std::list<Engine::Objects::Static_Object> vec)
+    {
+        for(const auto& obj: vec)
+        {
+            if(obj.clip) return false;
+        }
+        return true;
+    }
 }
 
 namespace Gameplay {
@@ -45,7 +53,8 @@ namespace Gameplay {
                  start.x + depth,
                  1))
             {
-                _p.emplace_back(scene.get(sf::Vector2i(x, y)) ? 0 : 0xff);
+                const auto* item = scene.get<Engine::Objects::Static_Object>(sf::Vector2i(x, y));
+                _p.emplace_back((item != nullptr && _objectsCannotClip(*item)) ? 0 : 1); // 0 - не препядствует; Не 0 - не пройти.
             }
         }
         // Матрица типа [y][x] с весами.

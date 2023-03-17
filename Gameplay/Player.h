@@ -1,6 +1,6 @@
 #pragma once
 #include <Gameplay/Objects.h>
-#include <Gameplay/Scene.h>
+#include <Gameplay/Scene.hpp>
 #include "Player.h"
 #include <vector>
 

@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /DDEBUG=TRUE /std:c++17")
 
 
 #variables
-#set(INCLUDE_DIR "D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include")
+set(INCLUDE_DIR "D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include")
 
 
 add_executable(freakWorld
@@ -14,7 +14,7 @@ add_executable(freakWorld
 		Gameplay/Objects/Dynamic_Object.h 	Gameplay/Objects/Dynamic_Object.cpp
 		Gameplay/Objects/Static_Object.h 	Gameplay/Objects/Static_Object.cpp 
 											Gameplay/Objects/StaticObject_BoxForm.cpp
-		Gameplay/Scene.h 					Gameplay/Scene.cpp
+		Gameplay/Scene.hpp 					Gameplay/Scene.cpp
 		Gameplay/Player.h					Gameplay/Player.cpp
 		
 
@@ -24,18 +24,18 @@ add_executable(freakWorld
  )
 
 #libs
-# set(Boost_INCLUDE_DIR "D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include")
-# set(Boost_LIBRARIES_CMAKE ${Boost_INCLUDE_DIR}/stage/lib)
+set(Boost_INCLUDE_DIR "D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include")
+set(Boost_LIBRARIES_CMAKE ${Boost_INCLUDE_DIR}/stage/lib)
 find_package(Boost 1.80.0 REQUIRED)
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME ON)
 link_directories(${Boost_LIBRARIES_CMAKE})
 
-
-find_package(SFML 2.5.1 REQUIRED graphics audio window system)
 set(SFML_DIR ${INCLUDE_DIR}/SFML/lib/cmake/SFML)
 set(SFML_STATIC_LIBRARIES TRUE)
+find_package(SFML 2.5.1 REQUIRED graphics audio window system)
+
 
 target_link_libraries(freakWorld sfml-graphics sfml-audio sfml-window sfml-system ${Boost_LIBRARIES})
 
