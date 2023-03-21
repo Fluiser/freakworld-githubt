@@ -16,7 +16,6 @@ namespace Scene {
 
 	Scene::__iterator Scene::begin()
 	{
-		*_dynamic_objects.begin();
 		return __iterator(_static_objects.begin(), _dynamic_objects.begin(), this);
 	}
 	Scene::__iterator Scene::end()
