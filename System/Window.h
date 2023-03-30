@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <Gameplay/Objects.h>
 #include "../Gameplay/Scene.hpp"
-#include <iostream>
 
 namespace Engine {
 	class Window: public sf::RenderWindow {

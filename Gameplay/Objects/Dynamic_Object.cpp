@@ -1,6 +1,8 @@
 #pragma once
 #include "Dynamic_Object.h"
 #include <System/Window.h>
+#include <boost/stacktrace.hpp>
+#include <iostream>
 
 namespace Engine
 {
@@ -14,7 +16,13 @@ namespace Engine
 			auto size = this->texture->getSize();
 			return sf::Vector2f((float)(size.x * s.x), (float)(size.y * s.y));
 		}
-
+/*		void BoxForm::normalize(const Engine::Window& window, const Scene::Scene& scene)
+		{
+			sf::Vector2i windowSize(window.getSize().x/2, window.getSize().y/2 + 1);
+			this->sprite.setPosition(
+					(sf::Vector2f)windowSize - sf::Vector2f(scene.offset.x, -scene.offset.y) + scene.getPositionf(this->gpos)
+					);
+		}*/
 		void Dynamic_Object::normalize(const Engine::Window& window, const Scene::Scene& scene)
 		{
 			sf::Vector2i windowSize(window.getSize().x / 2, window.getSize().y / 2 + 1);

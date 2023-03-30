@@ -6,14 +6,25 @@
 #include <System/Util.hpp>
 
 namespace {
-    bool _objectsCannotClip(const std::list<Engine::Objects::Static_Object> vec)
+    bool _objectsCanClip(const std::list<Engine::Objects::Static_Object> vec)
     {
         for(const auto& obj: vec)
         {
-            if(obj.clip) return false;
+            if(obj.clip) return true;
         }
-        return true;
+        return false;
     }
+
+    int _WayCost(const std::list<Engine::Objects::Static_Object> obj)
+    {
+        return 1; // На будущее.
+    }
+
+    struct Node {
+        Node* parent;
+        int weight;
+        sf::Vector2i pos;
+    };
 }
 
 namespace Gameplay {
@@ -34,35 +45,28 @@ namespace Gameplay {
                                             std::vector<sf::Vector2i>& vec_path,
                                             int max_depth)
     {
-        int depth = max_depth;
-        auto size = end-start;
+        auto p = start;
+        int sy = start.y < end.y ? 1 : -1;
+        int sx = start.x < end.x ? 1 : -1;
 
-        if( (abs(end.x-start.x) + abs(end.y - start.y) + 1) > depth) return;
-
-        // use path[y][x];
-        std::vector<std::vector<uint8_t>> path(depth*2);
-        for(const auto& y: Math::Range<int>(   (start.y - depth),
-                                               (start.y + depth),
-                                                1)) // стоить формулу пути, т.к. не всё отталкивается от точек конца
+        while((p.x != end.x || p.y != end.y) && max_depth > 0)
         {
-            path.emplace_back(std::vector<uint8_t>(depth*2));
-            auto& _p = path.back();
-            
-            for(const auto& x: Math::Range<int>(
-                 start.x - depth,
-                 start.x + depth,
-                 1))
-            {
-                const auto* item = scene.get<Engine::Objects::Static_Object>(sf::Vector2i(x, y));
-                _p.emplace_back((item != nullptr && _objectsCannotClip(*item)) ? 0 : 1); // 0 - не препядствует; Не 0 - не пройти.
+            if(p.x != end.x) {
+                p.x += sx;
+                --max_depth;
+                const auto* list = scene.get<Engine::Objects::Static_Object>(p);
+                if(list != nullptr && _objectsCanClip(*list)) return;
+                vec_path.emplace_back(p);
+            }
+            if(p.y != end.y) {
+                p.y += sy;
+                --max_depth;
+                const auto* list = scene.get<Engine::Objects::Static_Object>(p);
+                if(list != nullptr && _objectsCanClip(*list)) return;
+                vec_path.emplace_back(p);
             }
         }
-        // Матрица типа [y][x] с весами.
-        /**
-         * Сначала стоит пройтись по квадратам, мол, есть ли вообще клетки, по которым можно пройтись.
-         * А потом да.
-        */
-        
+
 
         // C++17 всё ещё сосёт.
         // Перемещать адекватно значения мы не умеем.

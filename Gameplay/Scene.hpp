@@ -38,7 +38,7 @@ namespace Scene {
 		float scale = 100.0;
 
 		std::map<int, std::list<Engine::Objects::Static_Object>> _static_objects;
-		std::list<Engine::Objects::Dynamic_Object> _dynamic_objects; // Блять, какая же дерьмовая архитектура...
+		std::list<Engine::Objects::Dynamic_Object> _dynamic_objects;
 
 		inline static int calcIdx(sf::Vector2i v)
 		{

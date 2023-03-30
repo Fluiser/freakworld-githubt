@@ -36,13 +36,15 @@ int main()
 	Scene::Scene scene(Scene::Scene::type_t::DYNAMIC_SCENE, window.getSize());
 
 	sf::Vector2f sizeWindow( window.getSize().x/2.0f, window.getSize().y/2.0f  );
+	sf::Vector2i lastmousePressed;
 
 	circle.setPosition(sizeWindow);
 
 	//DEB_LOG("\n\n" << scene.getScale()/ (float)obj.texture->getSize().x << "\n" << scene.getScale()/ (float)obj.texture->getSize().y << "\n\n");
 
 	auto& obj = scene.create< Engine::Objects::Static_Object >({0,0});
-	auto& path_obj = scene.create< Engine::Objects::Dynamic_Object >({255,255});
+	auto& path_obj = scene.create< Engine::Objects::Dynamic_Object >({3,3});
+	auto& mouse_obj = scene.create< Engine::Objects::Dynamic_Object >({0, 0});
 	
 	if(!obj.clip){
 		std::cout << "what the fuck";
@@ -52,6 +54,10 @@ int main()
 	path_obj.texture = std::make_shared<sf::Texture>();
 	path_obj.texture->loadFromFile("red.png");
 	path_obj.sprite.setTexture(*path_obj.texture);
+
+	mouse_obj.texture = std::make_shared<sf::Texture>();
+	mouse_obj.texture->loadFromFile("m.png");
+	mouse_obj.sprite.setTexture(*mouse_obj.texture);
 	
 
 	for(int i = 0; i < 3; ++i)
@@ -103,13 +109,20 @@ int main()
 			}
 			if(event.type == sf::Event::MouseButtonPressed)
 			{
-				vec_mouse = path_obj.gpos = scene.getVirtualPos(
-					(sf::Vector2f)sf::Mouse::getPosition(window) + sf::Vector2f(scene.offset.x, -scene.offset.y)
-				);
+				lastmousePressed = sf::Mouse::getPosition(window);
 				if(!last_point.filled)
 				{
-					last_point.pos = sf::Mouse::getPosition(window);
+					last_point.pos = lastmousePressed;
 					last_point.filled = true;
+				}
+			}
+			if(event.type == sf::Event::MouseButtonReleased)
+			{
+				if((sf::Vector2i)lastmousePressed == (sf::Vector2i)sf::Mouse::getPosition(window))
+				{
+					vec_mouse = mouse_obj.gpos = scene.getVirtualPos(
+						(sf::Vector2f)sf::Mouse::getPosition(window) + sf::Vector2f(scene.offset.x, -scene.offset.y)
+					);
 				}
 			}
 			if(event.type == sf::Event::MouseButtonReleased)
@@ -140,15 +153,11 @@ int main()
 		}
 		//std::cout << "OFFSET : " << scene.offset.x << " " << scene.offset.y << "\n";
 		window.clear();
-		window.drawScene(scene);
 		std::vector<sf::Vector2i> vpath = Gameplay::constructPath(sf::Vector2i(0, 0), vec_mouse, scene, 10);
 		//std::cout << vpath.size() << " <" << vec_mouse.x << "; " << vec_mouse.y << ">\n";
 		if (vpath.size() > 0)
 		{
 			// std::cout << "Достигаем\n";
-			path_obj.gpos = vec_mouse;
-			path_obj.normalize(window, scene);
-			window.draw(path_obj, scene);
 			for (auto pos : vpath)
 			{
 				path_obj.gpos = pos;
@@ -159,6 +168,7 @@ int main()
 			//std::cout << "Недостигаем.\n";
 		}
 		window.draw(circle);
+		window.drawScene(scene);
 		window.display();
 		fps += 1.0f;
 	}
