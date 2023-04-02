@@ -1,6 +1,6 @@
+#pragma once
 #include "Window.h"
 #include "./Util.hpp"
-#pragma once
 
 namespace Engine {
 	inline void Window::drawLine(const sf::Vector2f& s, const sf::Vector2f& e, sf::Color frogColor)
@@ -17,6 +17,11 @@ namespace Engine {
 	void Window::draw(const Engine::Objects::Object& obj, Scene::Scene& scene)
 	{
 		obj.render(*this, scene);
+	}
+
+	void Window::draw(const Engine::Graphics::TextAreas::BaseTextArea& txt, Scene::Scene& scene)
+	{
+		txt.render(*this, scene);
 	}
 
 

@@ -10,14 +10,14 @@ set(INCLUDE_DIR "D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include")
 
 
 add_executable(freakWorld
-		Gameplay/Objects/Object.h 			Gameplay/Objects/Object.cpp
-		Gameplay/Objects/Dynamic_Object.h 	Gameplay/Objects/Dynamic_Object.cpp
-		Gameplay/Objects/Static_Object.h 	Gameplay/Objects/Static_Object.cpp 
-											Gameplay/Objects/StaticObject_BoxForm.cpp
-		Gameplay/Scene.hpp 					Gameplay/Scene.cpp
-		Gameplay/Player.h					Gameplay/Player.cpp
-		
-
+		Gameplay/Objects/Object.h 						Gameplay/Objects/Object.cpp
+		Gameplay/Objects/Dynamic_Object.h 				Gameplay/Objects/Dynamic_Object.cpp
+		Gameplay/Objects/Static_Object.h 				Gameplay/Objects/Static_Object.cpp 
+														Gameplay/Objects/StaticObject_BoxForm.cpp
+		Gameplay/Scene.hpp 								Gameplay/Scene.cpp
+		Gameplay/Player.h								Gameplay/Player.cpp
+		System/Graphics/TextAreas/BaseTextArea.hpp			System/Graphics/TextAreas/BaseTextArea.cpp 	
+		System/Graphics/TextAreas/CompoundTextArea.hpp		System/Graphics/TextAreas/CompoundTextArea.cpp
 		System/Handlers.h 		System/Handlers.cpp
 		System/Window.h 		System/Window.cpp
 		main.cpp
