@@ -6,7 +6,6 @@
 #include <chrono>
 #include <Gameplay/Player.h>
 #include <System/Handlers.h>
-#include <System/Graphics/TextAreas.h>
 
 /*
  * Нахуй векторы sfml.
@@ -18,22 +17,17 @@ int main()
 {
 	init_handlers();
 
-	Engine::Window window(sf::VideoMode(1280, 720), "frog");
+	Engine::Window window(sf::VideoMode(1280, 720), "fuck");
 	sf::Event event;
-
-	sf::RectangleShape shape({ 200, 200 });
+	
+	sf::RectangleShape shape({200, 200});
 	shape.setFillColor(sf::Color::Red);
 	sf::CircleShape circle(3);
 	circle.setFillColor(sf::Color::Yellow);
 
-	circle.setPosition((1280 / 2 - 3), (720 / 2 - 3));
+	circle.setPosition(1280/2, 720/2);
 
-	sf::Font font;
-	font.loadFromFile("e.ttf");
-
-	auto& text = Engine::Graphics::TextAreas::CompoundTextArea(font, sf::Vector2i(0, 0));
-
-
+ 
 	struct {
 		bool filled = false;
 		sf::Vector2i pos;
@@ -41,17 +35,20 @@ int main()
 
 	Scene::Scene scene(Scene::Scene::type_t::DYNAMIC_SCENE, window.getSize());
 
+	sf::Vector2f sizeWindow( window.getSize().x/2.0f, window.getSize().y/2.0f  );
 	sf::Vector2i lastmousePressed;
+
+	circle.setPosition(sizeWindow);
 
 	//DEB_LOG("\n\n" << scene.getScale()/ (float)obj.texture->getSize().x << "\n" << scene.getScale()/ (float)obj.texture->getSize().y << "\n\n");
 
-	auto& obj = scene.create< Engine::Objects::Static_Object >({ 0,0 });
-	auto& path_obj = scene.create< Engine::Objects::Dynamic_Object >({ 3,3 });
-	auto& mouse_obj = scene.create< Engine::Objects::Dynamic_Object >({ 0, 0 });
-
-	if (!obj.clip) {
+	auto& obj = scene.create< Engine::Objects::Static_Object >({0,0});
+	auto& path_obj = scene.create< Engine::Objects::Dynamic_Object >({3,3});
+	auto& mouse_obj = scene.create< Engine::Objects::Dynamic_Object >({0, 0});
+	
+	if(!obj.clip){
 		std::cout << "what the fuck";
-		return 1;
+	return 1;
 	}
 
 	path_obj.texture = std::make_shared<sf::Texture>();
@@ -61,21 +58,21 @@ int main()
 	mouse_obj.texture = std::make_shared<sf::Texture>();
 	mouse_obj.texture->loadFromFile("m.png");
 	mouse_obj.sprite.setTexture(*mouse_obj.texture);
+	
 
-
-	for (int i = 0; i < 3; ++i)
+	for(int i = 0; i < 3; ++i)
 	{
-		for (int j = 0; j < 2; ++j)
+		for(int j = 0; j < 2; ++j)
 		{
 			std::string path = "box";
-			path += std::to_string(i + j);
+			path += std::to_string(i+j);
 			path += ".png";
 			std::shared_ptr<sf::Texture> texture(std::make_shared<sf::Texture>());
 			texture->loadFromFile(path);
 			obj.form.emplace_back();
 			obj.form.back().texture = texture;
 			obj.form.back().sprite.setTexture(*texture);
-			obj.form.back().gpos = { j + 1, i + 1 };
+			obj.form.back().gpos = {j+1, i+1};
 		}
 	}
 
@@ -87,61 +84,60 @@ int main()
 	std::thread fpsCalc([&] {
 		sf::Clock timer;
 		int timerMS;
-		while (window.isOpen())
+		while(window.isOpen())
 		{
-			if ((timerMS = timer.getElapsedTime().asMilliseconds()) >= 1000)
+			if( (timerMS = timer.getElapsedTime().asMilliseconds()) >= 1000)
 			{
-				float fpsPS = fps * (1000.0f / ((float)timerMS));
+				float fpsPS = fps * (1000.0f/((float)timerMS));
 				fps = 0;
 				timer.restart();
 				std::cout << "FPS: " << fpsPS << "\n";
-			}
-			else {
+			} else {
 				std::this_thread::sleep_for(std::chrono::milliseconds(1000 - timerMS));
 			}
 		}
-		});
+	});
 
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed) return 0;
-			if (event.type == sf::Event::MouseWheelMoved)
+			if(event.type == sf::Event::MouseWheelMoved)
 			{
-				scene.changeScale(scene.getScale() * 0.1 * event.mouseWheel.delta);
+				scene.changeScale(scene.getScale()*0.1*event.mouseWheel.delta);
 			}
-			if (event.type == sf::Event::MouseButtonPressed)
+			if(event.type == sf::Event::MouseButtonPressed)
 			{
 				lastmousePressed = sf::Mouse::getPosition(window);
-				if (!last_point.filled)
+				if(!last_point.filled)
 				{
 					last_point.pos = lastmousePressed;
 					last_point.filled = true;
 				}
 			}
-			if (event.type == sf::Event::MouseButtonReleased)
+			if(event.type == sf::Event::MouseButtonReleased)
 			{
-				if ((sf::Vector2i)lastmousePressed == (sf::Vector2i)sf::Mouse::getPosition(window))
+				if((sf::Vector2i)lastmousePressed == (sf::Vector2i)sf::Mouse::getPosition(window))
 				{
 					vec_mouse = mouse_obj.gpos = scene.getVirtualPos(
 						(sf::Vector2f)sf::Mouse::getPosition(window) + sf::Vector2f(scene.offset.x, -scene.offset.y)
 					);
 				}
 			}
-			if (event.type == sf::Event::MouseButtonReleased)
+			if(event.type == sf::Event::MouseButtonReleased)
 			{
 				last_point.filled = false;
 			}
 
-			if (event.type == sf::Event::MouseMoved && last_point.filled)
+			if(event.type == sf::Event::MouseMoved && last_point.filled)
 			{
-				scene.offset.x += (last_point.pos.x - event.mouseMove.x);
-				scene.offset.y -= (last_point.pos.y - event.mouseMove.y);
+				scene.offset.x += (last_point.pos.x-event.mouseMove.x);
+				scene.offset.y -= (last_point.pos.y-event.mouseMove.y);
 				last_point.pos.x = event.mouseMove.x;
 				last_point.pos.y = event.mouseMove.y;
 			}
-			if (event.type == sf::Event::KeyPressed)
+			if(event.type == sf::Event::KeyPressed)
 			{
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 					scene.offset.x += 10;
@@ -149,10 +145,10 @@ int main()
 				{
 					auto v = scene.getVisibleArea(window.getSize());
 					std::cout << "VISIBLE AREA: (" << v.start.x << "; " << v.start.y <<
-						") -> (" << v.end.x << "; " << v.end.y << ")\n";
+								 ") -> (" << v.end.x << "; " << v.end.y << ")\n";
 				}
 
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) return 0;
+				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) return 0;
 			}
 		}
 		//std::cout << "OFFSET : " << scene.offset.x << " " << scene.offset.y << "\n";
@@ -168,13 +164,11 @@ int main()
 				path_obj.normalize(window, scene);
 				window.draw(path_obj, scene);
 			}
-		}
-		else {
+		} else {
 			//std::cout << "Недостигаем.\n";
 		}
 		window.draw(circle);
 		window.drawScene(scene);
-		window.draw(text, scene);
 		window.display();
 		fps += 1.0f;
 	}

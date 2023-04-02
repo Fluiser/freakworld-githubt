@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <Gameplay/Objects.h>
-#include <System/Graphics/TextAreas.h>
 #include "../Gameplay/Scene.hpp"
 
 namespace Engine {
@@ -26,7 +25,6 @@ namespace Engine {
 		}
 
 		void draw(const Engine::Objects::Object& obj, Scene::Scene& scene);
-		void draw(const Engine::Graphics::TextAreas::BaseTextArea& txt, Scene::Scene& scene);
 		void drawScene( Scene::Scene&);
 		void changeScale(float);
 
