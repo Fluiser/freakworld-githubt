@@ -16,7 +16,7 @@ namespace Engine {
 				~BaseTextArea();
 
 				void setCharacterSize(int);
-				void render(Engine::Window& window, const Scene::Scene& scene) const;
+				virtual void render(Engine::Window& window, const Scene::Scene& scene) const;
 				void clear();
 
 				void setPosition(float x, float y);

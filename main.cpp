@@ -14,35 +14,34 @@
  * Надо будет переделать.
  * */
 
-float hue2rgb(float p, float q, float t){
-            if(t < 0.0f) t += 1.0f;
-            if(t > 1.0f) t -= 1.0f;
-            if(t < 1.0f/6.0f) return p + (q - p) * 6.0f * t;
-            if(t < 1.0f/2.0f) return q;
-            if(t < 2.0f/3.0f) return p + (q - p) * (2.0f/3.0f - t) * 6.0f;
-            return p;
-        }
-
-uint32_t hslToRgb(float h, float s, float l){
-    float r, g, b;
-	float q = l < 0.5 ? l * (1.0f + s) : l + s - l * s;
-	float p = 2.0f * l - q;
-	r = hue2rgb(p, q, h + 1.0f/3.0f);
-	g = hue2rgb(p, q, h);
-	b = hue2rgb(p, q, h - 1.0f/3.0f);
-	if(r < 0.1 && g < 0.1 && b < 0.1)
-		std::cout << h << " " << s << " " << l << "\n";
-    return ((int)round(r * 255.0f) << 24 | ((int)round(g * 255.0f) << 16) | ((int)round(b * 255.0f) << 8));
+float hue2rgb(float p, float q, float t) {
+	if (t < 0.0f) t += 1.0f;
+	if (t > 1.0f) t -= 1.0f;
+	if (t < 1.0f / 6.0f) return p + (q - p) * 6.0f * t;
+	if (t < 1.0f / 2.0f) return q;
+	if (t < 2.0f / 3.0f) return p + (q - p) * (2.0f / 3.0f - t) * 6.0f;
+	return p;
 }
 
-sf::Color colors[100] = {};
+uint32_t hslToRgb(float h, float s, float l) {
+	float r, g, b;
+	float q = l < 0.5 ? l * (1.0f + s) : l + s - l * s;
+	float p = 2.0f * l - q;
+	r = hue2rgb(p, q, h + 1.0f / 3.0f);
+	g = hue2rgb(p, q, h);
+	b = hue2rgb(p, q, h - 1.0f / 3.0f);
+	if (r < 0.1 && g < 0.1 && b < 0.1)
+		std::cout << h << " " << s << " " << l << "\n";
+	return ((int)round(r * 255.0f) << 24 | ((int)round(g * 255.0f) << 16) | ((int)round(b * 255.0f) << 8));
+}
 
 int main()
 {
-	for(int i = 1; i <= 100; ++i)
+	std::shared_ptr<sf::Color[]> colors = std::make_shared<sf::Color[]>(100);
+	for (int i = 1; i <= 100; ++i)
 	{
-		int f = hslToRgb(i/100.0f, 1, 0.5);
-		colors[i-1] = sf::Color(f |  0x000000ff);
+		int f = hslToRgb(i / 100.0f, 1, 0.5);
+		colors[i - 1] = sf::Color(f | 0x000000ff);
 	}
 
 	init_handlers();
@@ -60,19 +59,20 @@ int main()
 	sf::Font font;
 	font.loadFromFile("e.ttf");
 
-	int _color_index = 0;
-
-	auto& text = Engine::Graphics::TextAreas::CompoundTextArea(font, sf::Vector2i(0, 0));
-	for(const char _ch: "what the fuck?")
-	{
-		char str[2] = "a";
-		str[0] = _ch;
-		text.add(std::string(str), (colors[_color_index++ % (sizeof(colors)/sizeof(colors[0]))]));
-	}
-	_color_index = 1;
+	float counter = 0;
 	sf::Clock timer;
-	text.add("\nMade by Terrarianec(aka MaximKa)", sf::Color::Red);
-	text.setPosition(20, 400);
+
+	auto dancing_text = Engine::Graphics::TextAreas::DancingTextArea(font, sf::Vector2i(200, 200), colors, 100);
+	dancing_text.add("K");
+	dancing_text.add("P");
+	dancing_text.add("O");
+	dancing_text.add("T");
+	dancing_text.add("O");
+	dancing_text.add("B");
+	dancing_text.add("Y");
+	dancing_text.add("X");
+	dancing_text.add("A");
+	dancing_text.setAmplitude(0.5f);
 
 	struct {
 		bool filled = false;
@@ -212,18 +212,15 @@ int main()
 		else {
 			//std::cout << "Недостигаем.\n";
 		}
-		if(timer.getElapsedTime().asMilliseconds() > 20)
+		if (timer.getElapsedTime().asMilliseconds() > 50)
 		{
-			for(int i = 0; i < text.getLength()-1; ++i)
-			{
-				text[i].setFillColor(colors[(i+_color_index )% ((sizeof(colors) / sizeof(colors[0])))]);
-			}
-			++_color_index;
+			counter += 0.01f;
+			dancing_text.setStep(counter);
 			timer.restart();
 		}
 		window.draw(circle);
 		window.drawScene(scene);
-		window.draw(text, scene);
+		window.draw(dancing_text, scene);
 		window.display();
 		fps += 1.0f;
 	}

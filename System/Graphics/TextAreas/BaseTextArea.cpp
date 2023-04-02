@@ -31,7 +31,6 @@ namespace Engine {
 
 			 void BaseTextArea::render(Engine::Window& window, const Scene::Scene& scene) const {
 				for (auto& it: parts) {
-					auto vec = it.getPosition();
 					window.draw(it);
 				}
 			};
