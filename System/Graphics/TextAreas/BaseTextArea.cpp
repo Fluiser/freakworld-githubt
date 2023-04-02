@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "BaseTextArea.h"
+#include "BaseTextArea.hpp"
+#include <iostream>
+#include <System/Window.h>
 
 namespace Engine {
 	namespace Graphics {
@@ -28,10 +30,21 @@ namespace Engine {
 			}
 
 			 void BaseTextArea::render(Engine::Window& window, const Scene::Scene& scene) const {
-				for (auto it = parts.begin(); it != parts.end(); it++) {
-					window.draw(*it);
+				for (auto& it: parts) {
+					auto vec = it.getPosition();
+					window.draw(it);
 				}
 			};
+
+			size_t BaseTextArea::getLength() const
+			{
+				return parts.size();
+			}
+
+			sf::Text& BaseTextArea::operator[](int i)
+			{
+				return parts[i];
+			}
 		}
 	}
 }

@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <Gameplay/Objects.h>
-#include <System/Graphics/TextAreas.h>
 #include "../Gameplay/Scene.hpp"
+#include <System/Graphics/TextAreas.hpp>
 
 namespace Engine {
 	class Window: public sf::RenderWindow {
