@@ -5,4 +5,4 @@
 Так же игрок может трогать лягушькой других NPC - врагов, торговцев и т.д.<br/>
 Если они не будут лизать лягушьку каждый второй шаг - они умирают.<br/><br/>
 <h1>Игра построена на том, что собираются все враги в круг, и яростно лижут лягушьку.</h1>
-<img src="https://raw.githubusercontent.com/Fluiser/freakworld-githubt/main/prev.png">
+<img src="https://raw.githubusercontent.com/Fluiser/freakworld-githubt/main/prev.gif">
