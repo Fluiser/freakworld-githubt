@@ -114,10 +114,13 @@ namespace Engine {
 				{
 					if(txt.getString() == _str_space) continue;
 					auto pos = txt.getPosition();
+
+					float rsinf = (sinf(dub_stage) * _ampl);
+
 					if(wave || chaos)
-						txt.setPosition(pos.x, _position.y + (sinf(dub_stage) * _ampl));
+						txt.setPosition(pos.x, _position.y + (rsinf));
 					if(bounce)
-						txt.setPosition(pos.x, _position.y - (abs(sinf(dub_stage) * _ampl)));
+						txt.setPosition(pos.x, _position.y - (abs(rsinf) + rsinf)/2 );
 
 					if (wave)
 						dub_stage += (PID6);
