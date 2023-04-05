@@ -30,6 +30,7 @@ namespace Engine {
 
 		void String::add(sf::String str)
 		{
+			bool is_space = false;
 			for (const auto& s : str) 
 			{
 				sf::Text text(s, _font, _charSize);
@@ -89,13 +90,14 @@ namespace Engine {
 				float dub_stage = _stage;
 				for (auto& txt : _particles)
 				{
+					if(txt.getString() == _str_space) continue;
 					auto pos = txt.getPosition();
 					txt.setPosition(pos.x, _position.y + (sinf(dub_stage) * _ampl));
 
 					if (wave)
 						dub_stage += (PID6);
 					if (chaos)
-						dub_stage += (PID2);
+						dub_stage += (M_PI);
 				}
 
 				_timer_Bounce.restart();
