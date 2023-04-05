@@ -117,7 +117,7 @@ namespace Engine {
 					if(wave || chaos)
 						txt.setPosition(pos.x, _position.y + (sinf(dub_stage) * _ampl));
 					if(bounce)
-						txt.setPosition(pos.x, _position.y + (abs(sinf(dub_stage) * _ampl)));
+						txt.setPosition(pos.x, _position.y - (abs(sinf(dub_stage) * _ampl)));
 
 					if (wave)
 						dub_stage += (PID6);
