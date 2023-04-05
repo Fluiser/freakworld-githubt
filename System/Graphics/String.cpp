@@ -122,6 +122,8 @@ namespace Engine {
 					if(bounce)
 						txt.setPosition(pos.x, _position.y - (abs(rsinf) + rsinf)/2 );
 
+					if(bounce)
+						dub_stage -= (PID6);
 					if (wave)
 						dub_stage += (PID6);
 					if (chaos)
