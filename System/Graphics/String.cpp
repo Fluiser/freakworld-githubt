@@ -12,7 +12,6 @@ namespace Engine {
 										_position(pos),
 										_type(type)
 		{
-			_position.y += _ampl;
 			if (_default_font.getInfo().family.empty()) {
 				_default_font = font;
 			} else if (font.getInfo().family.empty()) {
@@ -125,9 +124,7 @@ namespace Engine {
 
 		void String::setAmplitude(float a)
 		{
-			_position.y -= (_ampl);
 			_ampl = a/2;
-			_position.y += _ampl;
 		}
 
 		void String::setStage(float f)
