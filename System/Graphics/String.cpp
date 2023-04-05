@@ -77,7 +77,7 @@ namespace Engine {
 			}
 			if (_type & WAVE || _type & CHAOS)
 			{
-				float cf = ((float)_timer_Bounce.getElapsedTime().asMilliseconds()/250.0f);
+				float cf = ((float)_timer_Bounce.getElapsedTime().asMilliseconds()/450.0f);
 				bool wave = _type & WAVE;
 				bool chaos = _type & CHAOS;
 				
