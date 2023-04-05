@@ -19,11 +19,6 @@ namespace Engine {
 		obj.render(*this, scene);
 	}
 
-	void Window::draw(const Engine::Graphics::TextAreas::BaseTextArea& txt, Scene::Scene& scene)
-	{
-		txt.render(*this, scene);
-	}
-
 
 	/*
 	 * Переписать сия чудо.

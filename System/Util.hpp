@@ -1,4 +1,7 @@
 #pragma once
+
+#define M_PI 3.14159265358979323846
+
 #ifdef DEBUG
 
 #define DEB_LOG(x) std::cout << x

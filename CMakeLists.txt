@@ -1,8 +1,8 @@
 project(freakWorld)
 cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_CXX_STANDART 20)
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 /std:c++17")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /DDEBUG=TRUE /std:c++17")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 /std:c++20")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /DDEBUG=TRUE /std:c++20")
 
 
 #variables
@@ -16,12 +16,11 @@ add_executable(freakWorld
 														Gameplay/Objects/StaticObject_BoxForm.cpp
 		Gameplay/Scene.hpp 								Gameplay/Scene.cpp
 		Gameplay/Player.h								Gameplay/Player.cpp
-		System/Graphics/TextAreas/BaseTextArea.hpp			System/Graphics/TextAreas/BaseTextArea.cpp 	
-		System/Graphics/TextAreas/CompoundTextArea.hpp		System/Graphics/TextAreas/CompoundTextArea.cpp
+		System/Graphics/String.hpp						System/Graphics/String.cpp
 		System/Handlers.h 		System/Handlers.cpp
 		System/Window.h 		System/Window.cpp
 		main.cpp
- )
+)
 
 #libs
 set(Boost_INCLUDE_DIR "D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include")

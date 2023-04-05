@@ -3,10 +3,10 @@
 #include "Gameplay/Scene.hpp"
 #include <iostream>
 #include <thread>
+#include <System/Graphics/String.hpp>
 #include <chrono>
 #include <Gameplay/Player.h>
 #include <System/Handlers.h>
-#include <System/Graphics/TextAreas.hpp>
 #include <math.h>
 
 /*
@@ -38,41 +38,29 @@ uint32_t hslToRgb(float h, float s, float l) {
 int main()
 {
 	std::shared_ptr<sf::Color[]> colors = std::make_shared<sf::Color[]>(100);
-	for (int i = 1; i <= 100; ++i)
-	{
-		int f = hslToRgb(i / 100.0f, 1, 0.5);
+
+	for (int i = 1; i <= 20; ++i)
+	{//
+		int f = hslToRgb(i / 100.0f * 5, 1, 0.5);
 		colors[i - 1] = sf::Color(f | 0x000000ff);
 	}
 
 	init_handlers();
 
-	Engine::Window window(sf::VideoMode(1600, 720), "frog");
+	Engine::Window window(sf::VideoMode(1280, 720), "frog");
 	sf::Event event;
 
 	sf::RectangleShape shape({ 200, 200 });
 	shape.setFillColor(sf::Color::Red);
-	sf::CircleShape circle(3);
-	circle.setFillColor(sf::Color::Yellow);
-
-	circle.setPosition((1280 / 2 - 3), (720 / 2 - 3));
 
 	sf::Font font;
 	font.loadFromFile("e.ttf");
 
-	float counter = 0;
-	sf::Clock timer;
+	Engine::Graphics::String str(20.0f, {50, 250}, Engine::Graphics::String::RAINBOW | Engine::Graphics::String::WAVE | Engine::Graphics::String::CHAOS, font);
+	str.setCharSize(72);
+	str.add("I feel like shit");
 
-	auto dancing_text = Engine::Graphics::TextAreas::DancingTextArea(font, sf::Vector2i(200, 200), colors, 100);
-	dancing_text.add("K");
-	dancing_text.add("P");
-	dancing_text.add("O");
-	dancing_text.add("T");
-	dancing_text.add("O");
-	dancing_text.add("B");
-	dancing_text.add("Y");
-	dancing_text.add("X");
-	dancing_text.add("A");
-	dancing_text.setAmplitude(0.5f);
+	str.setColorSet(colors, 20);
 
 	struct {
 		bool filled = false;
@@ -118,6 +106,8 @@ int main()
 			obj.form.back().gpos = { j + 1, i + 1 };
 		}
 	}
+
+	sf::Clock fps_clock;
 
 	scene.setScale(scene.getScale());
 	sf::Vector2i vec_mouse;
@@ -212,17 +202,13 @@ int main()
 		else {
 			//std::cout << "Недостигаем.\n";
 		}
-		if (timer.getElapsedTime().asMilliseconds() > 50)
-		{
-			counter += 0.01f;
-			dancing_text.setStep(counter);
-			timer.restart();
-		}
-		window.draw(circle);
 		window.drawScene(scene);
-		window.draw(dancing_text, scene);
+		window.draw(str);
+		str.normalize();
 		window.display();
 		fps += 1.0f;
+		std::this_thread::sleep_for(std::chrono::milliseconds(16 - fps_clock.getElapsedTime().asMilliseconds()));
+		fps_clock.restart();
 	}
 
 	return 0;
