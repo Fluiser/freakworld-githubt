@@ -8,7 +8,7 @@ namespace Engine {
 		String::String(	float ampligute,
 						sf::Vector2f pos,
 						int type, 
-						sf::Font font): _ampl(ampligute/2),
+						sf::Font font): _ampl(ampligute),
 										_position(pos),
 										_type(type)
 		{
@@ -150,7 +150,7 @@ namespace Engine {
 
 		void String::setAmplitude(float a)
 		{
-			_ampl = a/2;
+			_ampl = a;
 		}
 
 		void String::setStage(float f)
