@@ -61,7 +61,8 @@ namespace Engine {
 			enum TYPE : int {
 				RAINBOW = 1,
 				WAVE = 1 << 1,
-				CHAOS = 1 << 2
+				CHAOS = 1 << 2,
+				BOUNCE = 1 << 3
 			};
 
 			String(String&&) = default;

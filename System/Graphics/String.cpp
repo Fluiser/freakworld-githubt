@@ -1,5 +1,5 @@
 #include "String.hpp"
-#include <iostream>
+
 namespace Engine {
 	namespace Graphics {
 
@@ -33,7 +33,6 @@ namespace Engine {
 				{
 					
 					it->setCharacterSize(s);
-					std::cout << _font.getLineSpacing(_charSize) << "\n";
 					it->setPosition(	p.getLocalBounds().width +
 										ls +
 										_font.getKerning(it->getString()[0], *p.getString().begin(), _charSize) +
@@ -95,15 +94,19 @@ namespace Engine {
 				
 				_timer_Rainbow.restart();
 			}
-			if (_type & WAVE || _type & CHAOS)
+
+			if (_type & WAVE || _type & BOUNCE || _type & CHAOS)
 			{
 				float cf = ((float)_timer_Bounce.getElapsedTime().asMilliseconds()/450.0f);
 				bool wave = _type & WAVE;
 				bool chaos = _type & CHAOS;
-				
+				bool bounce = _type & BOUNCE;
+
 				if (wave)
 					_stage += (M_PI * cf);
 				if (chaos)
+					_stage += (M_PI * cf);
+				if(bounce)
 					_stage += (M_PI * cf);
 
 				float dub_stage = _stage;
@@ -111,7 +114,10 @@ namespace Engine {
 				{
 					if(txt.getString() == _str_space) continue;
 					auto pos = txt.getPosition();
-					txt.setPosition(pos.x, _position.y + (sinf(dub_stage) * _ampl));
+					if(wave || chaos)
+						txt.setPosition(pos.x, _position.y + (sinf(dub_stage) * _ampl));
+					if(bounce)
+						txt.setPosition(pos.x, _position.y + (abs(sinf(dub_stage) * _ampl)));
 
 					if (wave)
 						dub_stage += (PID6);
