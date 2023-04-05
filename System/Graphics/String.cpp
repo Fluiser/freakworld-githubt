@@ -37,7 +37,6 @@ namespace Engine {
 					text.setPosition(_position);
 				} else {
 					float offx = 	_particles.back().getPosition().x +
-									_particles.back().getLocalBounds().width +
 									_font.getKerning(_particles.back().getString()[0], s, _charSize);
 					text.setPosition(_position.x + offx, _position.y);
 				}
@@ -54,7 +53,6 @@ namespace Engine {
 					text.setPosition(_position);
 				} else {
 					float offx = 	_particles.back().getPosition().x +
-									_particles.back().getLocalBounds().width +
 									_font.getKerning(_particles.back().getString()[0], s, _charSize);
 					text.setPosition(_position.x + offx, _position.y);
 				}
