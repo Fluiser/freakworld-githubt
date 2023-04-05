@@ -56,7 +56,7 @@ int main()
 	sf::Font font;
 	font.loadFromFile("e.ttf");
 
-	Engine::Graphics::String str(20.0f, {50, 250}, Engine::Graphics::String::RAINBOW | Engine::Graphics::String::WAVE | Engine::Graphics::String::CHAOS, font);
+	Engine::Graphics::String str(20.0f, {50, 250}, Engine::Graphics::String::RAINBOW | Engine::Graphics::String::WAVE, font);
 	str.setCharSize(72);
 	str.add("I feel like shit");
 
