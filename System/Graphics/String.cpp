@@ -1,5 +1,5 @@
 #include "String.hpp"
-
+#include <iostream>
 namespace Engine {
 	namespace Graphics {
 
@@ -22,6 +22,7 @@ namespace Engine {
 
 		void String::setCharSize(unsigned s)
 		{
+			float ls = _font.getLineSpacing(_charSize)/10;
 			_charSize = s;
 			if(_particles.size())
 			{
@@ -30,8 +31,13 @@ namespace Engine {
 				++it;
 				for(auto& p: _particles)
 				{
+					
 					it->setCharacterSize(s);
-					it->setPosition(p.getLocalBounds().width + p.getPosition().x, _position.y);
+					std::cout << _font.getLineSpacing(_charSize) << "\n";
+					it->setPosition(	p.getLocalBounds().width +
+										ls +
+										_font.getKerning(it->getString()[0], *p.getString().begin(), _charSize) +
+										p.getPosition().x, _position.y);
 					++it;
 					if(it == _particles.end()) break;
 				}
@@ -40,7 +46,7 @@ namespace Engine {
 
 		void String::add(sf::String str)
 		{
-			bool is_space = false;
+			float ls = _font.getLineSpacing(_charSize)/10;
 			for (const auto& s : str) 
 			{
 				sf::Text text(s, _font, _charSize);
@@ -48,7 +54,9 @@ namespace Engine {
 					text.setPosition(_position);
 				} else {
 					float offx = 	_particles.back().getPosition().x +
-									_particles.back().getLocalBounds().width;
+									ls +
+									_particles.back().getLocalBounds().width + 
+									_font.getKerning(_particles.back().getString()[0], s, _charSize);
 					text.setPosition(offx, _position.y);
 				}
 				_particles.emplace_back(text);
@@ -57,6 +65,7 @@ namespace Engine {
 
 		void String::add(sf::Text text)
 		{
+			float ls = _font.getLineSpacing(_charSize)/10;
 			for (const auto& s : text.getString())
 			{
 				sf::Text ctxt(sf::String(s), (text.getFont() == nullptr ? _font : *text.getFont()), text.getCharacterSize());
@@ -64,7 +73,9 @@ namespace Engine {
 					text.setPosition(_position);
 				} else {
 					float offx = 	_particles.back().getPosition().x +
-									_particles.back().getLocalBounds().width;
+									ls +
+									_particles.back().getLocalBounds().width + 
+									_font.getKerning(_particles.back().getString()[0], s, _charSize);
 					text.setPosition(offx, _position.y);
 				}
 				_particles.emplace_back(ctxt);
