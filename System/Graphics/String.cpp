@@ -23,8 +23,19 @@ namespace Engine {
 		void String::setCharSize(unsigned s)
 		{
 			_charSize = s;
-			for(auto& p: _particles)
-				p.setCharacterSize(s);
+			if(_particles.size())
+			{
+				auto it = _particles.begin();
+				it->setCharacterSize(s);
+				++it;
+				for(auto& p: _particles)
+				{
+					it->setCharacterSize(s);
+					it->setPosition(p.getLocalBounds().width + p.getPosition().x, _position.y);
+					++it;
+					if(it == _particles.end()) break;
+				}
+			}
 		}
 
 		void String::add(sf::String str)
@@ -37,8 +48,8 @@ namespace Engine {
 					text.setPosition(_position);
 				} else {
 					float offx = 	_particles.back().getPosition().x +
-									_font.getKerning(_particles.back().getString()[0], s, _charSize);
-					text.setPosition(_position.x + offx, _position.y);
+									_particles.back().getLocalBounds().width;
+					text.setPosition(offx, _position.y);
 				}
 				_particles.emplace_back(text);
 			}
@@ -53,8 +64,8 @@ namespace Engine {
 					text.setPosition(_position);
 				} else {
 					float offx = 	_particles.back().getPosition().x +
-									_font.getKerning(_particles.back().getString()[0], s, _charSize);
-					text.setPosition(_position.x + offx, _position.y);
+									_particles.back().getLocalBounds().width;
+					text.setPosition(offx, _position.y);
 				}
 				_particles.emplace_back(ctxt);
 			}
