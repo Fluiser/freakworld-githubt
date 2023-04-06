@@ -58,7 +58,7 @@ namespace Gameplay {
                 if(list != nullptr && _objectsCanClip(*list)) return;
                 vec_path.emplace_back(p);
             }
-            if(p.y != end.y) {
+            if(p.y != end.y && max_depth > 0) {
                 p.y += sy;
                 --max_depth;
                 const auto* list = scene.get<Engine::Objects::Static_Object>(p);
