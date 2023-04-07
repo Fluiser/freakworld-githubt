@@ -6,3 +6,4 @@
 Если они не будут лизать лягушьку каждый второй шаг - они умирают.<br/><br/>
 <h1>Игра построена на том, что собираются все враги в круг, и яростно лижут лягушьку.</h1>
 <img src="https://raw.githubusercontent.com/Fluiser/freakworld-githubt/main/ifeellikeshit.gif">
+<img src="https://raw.githubusercontent.com/Fluiser/freakworld-githubt/main/prev.gif">
