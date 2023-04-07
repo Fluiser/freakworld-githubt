@@ -8,4 +8,4 @@
 <img src="https://raw.githubusercontent.com/Fluiser/freakworld-githubt/main/readme_imgs/ifeellikeshit.gif">
 <img src="https://raw.githubusercontent.com/Fluiser/freakworld-githubt/main/readme_imgs/prev.gif">
 Основная цель:
-<img src="https://raw.githubusercontent.com/Fluiser/freakworld-githubt/main/readme_imgs/prev.gif">
+<img src="https://raw.githubusercontent.com/Fluiser/freakworld-githubt/main/readme_imgs/krot.gif">
