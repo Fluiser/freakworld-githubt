@@ -8,6 +8,7 @@
 #include <Gameplay/Player.h>
 #include <System/Handlers.h>
 #include <math.h>
+#include <System/Discord.hpp>
 
 /*
  * Нахуй векторы sfml.
@@ -35,8 +36,9 @@ uint32_t hslToRgb(float h, float s, float l) {
 	return ((int)round(r * 255.0f) << 24 | ((int)round(g * 255.0f) << 16) | ((int)round(b * 255.0f) << 8));
 }
 
-int main()
+int main(int argc, char** argv)
 {
+
 	std::shared_ptr<sf::Color[]> colors = std::make_shared<sf::Color[]>(100);
 
 	for (int i = 1; i <= 20; ++i)
@@ -49,6 +51,8 @@ int main()
 
 	Engine::Window window(sf::VideoMode(1280, 720), "frog");
 	sf::Event event;
+
+	window.setVerticalSyncEnabled(true);
 
 	sf::RectangleShape shape({ 200, 200 });
 	shape.setFillColor(sf::Color::Red);
@@ -68,6 +72,9 @@ int main()
 	} last_point;
 
 	Scene::Scene scene(Scene::Scene::type_t::DYNAMIC_SCENE, window.getSize());
+
+	Discord::init(argv[0], "DYNAMIC_SCENE", "DefaultWorld");
+	Discord::CallbackThread(window);
 
 	sf::Vector2i lastmousePressed;
 
@@ -106,8 +113,6 @@ int main()
 			obj.form.back().gpos = { j + 1, i + 1 };
 		}
 	}
-
-	sf::Clock fps_clock;
 
 	scene.setScale(scene.getScale());
 	sf::Vector2i vec_mouse;
@@ -207,8 +212,6 @@ int main()
 		str.normalize();
 		window.display();
 		fps += 1.0f;
-		std::this_thread::sleep_for(std::chrono::milliseconds(16 - fps_clock.getElapsedTime().asMilliseconds()));
-		fps_clock.restart();
 	}
 
 	return 0;
