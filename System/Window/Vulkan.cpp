@@ -6,7 +6,11 @@ namespace Engine {
         namespace Wrapper {
 
             VulkanDriver::VulkanDriver() {}
-            VulkanDriver::~VulkanDriver() {}
+            VulkanDriver::~VulkanDriver()
+            {
+                vkDestroySurfaceKHR(instance, surface, 0);
+                vkDestroyInstance(instance, 0);
+            }
 
             void VulkanDriver::init(std::vector<const char*> req_ext)
             {

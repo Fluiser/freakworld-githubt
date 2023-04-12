@@ -36,7 +36,8 @@ namespace Engine{
                         },
                         GLFWmonitor* monitor = nullptr);
             Engine::IODevices::Event waitEvent();
-
+            inline bool ShouldClose()
+            { return glfwWindowShouldClose(_window); }
         };
     }
 }

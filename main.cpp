@@ -8,7 +8,7 @@ int main()
 
 	window.init({1280, 720}, "hell");
 
-	while(1)
+	while(!window.ShouldClose())
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 		glfwPollEvents();

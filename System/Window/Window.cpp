@@ -4,7 +4,10 @@ namespace Engine{
     namespace Window {
 
         Window::Window() {}
-        Window::~Window() {}
+        Window::~Window() 
+        {
+            glfwDestroyWindow(_window);
+        }
 
         void Window::init(  Math::vec2i size,
                             std::string&& title, 
