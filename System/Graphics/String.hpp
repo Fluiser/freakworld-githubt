@@ -6,8 +6,8 @@
 #include <memory>
 
 namespace {
-	constexpr float PID6 = (M_PI / 6.0f); // Pi divided by 6
-	constexpr float PID2 = (M_PI / 2.0f);
+	constexpr float PID6 = (float)(M_PI / 6.0f); // Pi divided by 6
+	constexpr float PID2 = (float)(M_PI / 2.0f);
 	sf::String _str_space(" ");
 }
 
@@ -62,7 +62,8 @@ namespace Engine {
 				RAINBOW = 1,
 				WAVE = 1 << 1,
 				CHAOS = 1 << 2,
-				BOUNCE = 1 << 3
+				BOUNCE = 1 << 3,
+				INTERTIAL_BOUNCE = 1 << 4
 			};
 
 			String(String&&) = default;
