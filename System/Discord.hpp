@@ -88,12 +88,13 @@ namespace Discord {
         activity.SetState(_state.c_str());
         activity.SetType(discord::ActivityType::Playing);
 
-        activity.GetAssets().SetSmallImage("status");
+        activity.GetAssets().SetSmallImage("statusnow");
         activity.GetAssets().SetSmallText("Помоги");
-        activity.GetAssets().SetLargeImage("ava");
+        activity.GetAssets().SetLargeImage("avatar");
+
         // activity.GetAssets().SetLargeText("yeah");
 
-        activity.GetTimestamps().SetStart(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count()*1000);
+        activity.GetTimestamps().SetStart(1671829200000);
 
         state.core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
             if(result != discord::Result::Ok) std::cout << "Failed update activity discord: " << (int)result << "\n";

@@ -1,9 +1,9 @@
-project(freakWorld)
+set(CMAKE_TOOLCHAIN_FILE "F:/github/vcpkg/scripts/buildsystems/vcpkg.cmake")
 cmake_minimum_required(VERSION 3.0.0)
+project(freakWorld)
 set(CMAKE_CXX_STANDART 20)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 /std:c++20")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /DDEBUG=TRUE /std:c++20")
-
 
 #variables
 set(INCLUDE_DIR "D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include")
@@ -23,10 +23,12 @@ find_package(SFML 2.5.1 REQUIRED graphics audio window system)
 
 if (WIN32)
 	add_compile_definitions(WIN32=TRUE)
+	set(OTHER_LIB "")
 endif(WIN32)
 
 if (UNIX)
 	add_compile_definitions(LINUX=TRUE)
+	set(OTHER_LIB "")
 endif(UNIX)
 
 #///
@@ -47,18 +49,14 @@ endif()
 message(LNK: ${DISCORD_LNK}\n DLL LIB: ${DISCORD_DLL})
 
 add_executable(freakWorld
-		Gameplay/Objects/Object.h 						Gameplay/Objects/Object.cpp
-		Gameplay/Objects/Dynamic_Object.h 				Gameplay/Objects/Dynamic_Object.cpp
-		Gameplay/Objects/Static_Object.h 				Gameplay/Objects/Static_Object.cpp 
-														Gameplay/Objects/StaticObject_BoxForm.cpp
-		Gameplay/Scene.hpp 								Gameplay/Scene.cpp
-		Gameplay/Player.h								Gameplay/Player.cpp
-		System/Graphics/String.hpp						System/Graphics/String.cpp
-		System/Handlers.h 		System/Handlers.cpp
-		System/Window.h 		System/Window.cpp
-		
-		${DISCORD_LNK}
+		System/Window/Vulkan.hpp						System/Window/Vulkan.cpp
+		System/Window/Window.hpp						System/Window/Window.cpp 
+
+		System/IODevices/Event.hpp						System/IODevices/Event.cpp 
 
 		main.cpp
 )
-target_link_libraries(freakWorld sfml-graphics sfml-audio sfml-window sfml-system ${Boost_LIBRARIES} ${DISCORD_DLL})
+
+find_package(glfw3 CONFIG REQUIRED)
+find_package(Vulkan REQUIRED)
+target_link_libraries(freakWorld sfml-graphics sfml-audio sfml-window sfml-system ${Boost_LIBRARIES} ${OTHER_LIB} glfw Vulkan::Vulkan)

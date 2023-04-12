@@ -1,4 +1,5 @@
 #include "String.hpp"
+#include <iostream>
 
 namespace Engine {
 	namespace Graphics {
@@ -93,6 +94,28 @@ namespace Engine {
 				}
 				
 				_timer_Rainbow.restart();
+			}
+
+			if(_type & INTERTIAL_BOUNCE)
+			{
+				float cf = ((float)_timer_Bounce.getElapsedTime().asMilliseconds()/450.0f);
+
+				float pos = (sinf(_stage)*expf(-0.36f*_stage)*(1.0f + 3.0f*sinf(2.0f*_stage)) - 0.4f*sinf(_stage))*_ampl;
+
+				if(_stage > 4.5f)
+				{
+					_stage = 0.0f;
+					pos = 0.0f;
+				}
+
+				for(auto& txt: _particles)
+				{
+					auto posText = txt.getPosition();
+					txt.setPosition(posText.x, _position.y - pos);
+				}
+
+				_stage += (cf * PID2);
+				_timer_Bounce.restart();
 			}
 
 			if (_type & WAVE || _type & BOUNCE || _type & CHAOS)
