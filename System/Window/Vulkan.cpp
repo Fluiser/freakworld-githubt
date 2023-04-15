@@ -9,8 +9,9 @@ namespace Engine {
             VulkanDriver::VulkanDriver() {}
             VulkanDriver::~VulkanDriver()
             {
-                vkDestroySurfaceKHR(instance, surface, 0);
-                vkDestroyInstance(instance, 0);
+                vkDestroyDevice(_device, nullptr);
+                vkDestroySurfaceKHR(instance, surface, nullptr);
+                vkDestroyInstance(instance, nullptr);
             }
 
             void VulkanDriver::init(std::vector<const char*> req_ext)
@@ -55,7 +56,7 @@ namespace Engine {
 
                 VkPhysicalDeviceProperties prop; 
                 std::vector<VkQueueFamilyProperties> familyProp;
-                int idxFamilyQueue = 0;
+                uint32_t idxFamilyQueue = 0;
                 for(auto& dev: devices)
                 {
                     vkGetPhysicalDeviceProperties(dev, &prop);
