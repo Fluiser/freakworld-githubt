@@ -6,17 +6,23 @@
 #endif
 #include <vulkan/vulkan.hpp>
 #include <vector>
+#include <string>
+#include <System/Graphics/System/RenderPool.hpp>
 
 
 namespace Engine {
     namespace Window {
         class Window;
         namespace Wrapper {
-            
+
             class VulkanDriver {
+                std::vector<Engine::System::Graphics::RenderPool> _render_queue;
             protected:
 
                 friend Window;
+
+                VkPhysicalDevice _PhysicalDevice;
+                VkDevice _device;
 
                 VkApplicationInfo appInfo{};
                 VkInstance instance;

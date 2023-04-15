@@ -3,6 +3,7 @@
 #define M_PI 3.14159265358979323846f
 
 #ifdef DEBUG
+#include <iostream>
 
 #define DEB_LOG(x) std::cout << x
 
@@ -20,6 +21,25 @@
 #define BREAK_POINT_IF(x)
 #endif
 
+#include <stdlib.h>
+#include <boost/stacktrace.hpp>
+#include <string>
+#ifdef WIN32
+#include <Windows.h>
+#define CRITICAL_ERROR(message) { \
+	std::string msg = message; \
+	msg += '\n'; \
+	msg += boost::stacktrace::to_string(boost::stacktrace::stacktrace()); \
+	MessageBox(0, msg.c_str(), "CRITICAL ERROR", MB_ICONERROR); \
+	exit(0xff);}
+#else
+#define CRITICAL_ERROR(message) { \
+	std::string msg = message; \
+	msg += '\n'; \
+	msg += boost::stacktrace::to_string(boost::stacktrace::stacktrace()); \
+	std::cout << msg << "\n"; \
+	exit(0xff);}
+#endif
 #include <math.h>
 #include <stdint.h>
 
@@ -90,4 +110,10 @@ namespace Math {
 	typedef vec2<float>		vec2f;
 	typedef vec2<uint32_t>	vec2u;
 	typedef vec2<int32_t>	vec2i;
+}
+
+template<typename T>
+void ZeroMem(T& v)
+{
+	memset((void*)&v, 0, sizeof(v));
 }

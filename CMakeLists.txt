@@ -51,7 +51,6 @@ message(LNK: ${DISCORD_LNK}\n DLL LIB: ${DISCORD_DLL})
 add_executable(freakWorld
 		System/Window/Vulkan.hpp						System/Window/Vulkan.cpp
 		System/Window/Window.hpp						System/Window/Window.cpp 
-
 		System/IODevices/Event.hpp						System/IODevices/Event.cpp 
 
 		main.cpp

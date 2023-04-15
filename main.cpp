@@ -1,6 +1,7 @@
 #include <System/Window/Window.hpp>
 #include <thread>
 #include <chrono>
+#include <iostream>
 
 int main()
 {

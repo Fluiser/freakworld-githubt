@@ -17,6 +17,7 @@
 namespace Engine{
     namespace Window {
         class Window {
+        private:
             GLFWwindow* _window;
             std::string _window_title;
             std::mutex _event_mtx;
