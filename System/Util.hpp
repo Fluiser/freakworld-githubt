@@ -59,6 +59,12 @@ namespace Math {
 		{}
 		vec2(): x(0), y(0) {}
 
+		void operator=(const vt& vec)
+		{
+			x = vec.x;
+			y = vec.y;
+		}
+
 		void operator+=(const vt& vec)
 		{
 			x += vec.x;

@@ -1,13 +1,14 @@
-#include <GLFW/glfw3.h>
-#if defined(WIN32)
+#ifdef WIN32
 #define VK_USE_PLATFORM_WIN32_KHR
-#else
-#define VK_USE_PLATFORM_XCB_KHR
+#define VK_PROTOTYPES
 #endif
+#define GLFW_INCLUDE_VULKAN
 #include <vulkan/vulkan.hpp>
+#include <GLFW/glfw3.h>
 #include <vector>
 #include <string>
 #include <System/Graphics/System/RenderPool.hpp>
+#include <System/Util.hpp>
 
 
 namespace Engine {
@@ -24,17 +25,25 @@ namespace Engine {
                 VkPhysicalDevice _PhysicalDevice;
                 VkDevice _device;
 
-                VkApplicationInfo appInfo{};
-                VkInstance instance;
-                VkSurfaceKHR surface;
+                VkQueue _renderq;
+                VkQueue _presentq;
+
+                VkInstance _instance;
+                VkSurfaceKHR _surface;
+                VkSwapchainKHR _swapchain;
+
+                VkApplicationInfo _appInfo;
+
             public:
+                // inline static int QueueCount = 0;
+
                 void operator=(const VulkanDriver&) = delete;
 
                 VulkanDriver(const VulkanDriver&) = delete;
                 VulkanDriver();
                 ~VulkanDriver();
                 
-                void init(std::vector<const char*> req_extension);
+                void init(std::vector<const char*> req_extension, std::vector<const char*> deviceExtension, GLFWwindow* window, Math::vec2i size);
             };
 
         }

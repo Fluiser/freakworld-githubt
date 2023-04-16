@@ -23,6 +23,8 @@ namespace Engine{
             std::mutex _event_mtx;
 
             Wrapper::VulkanDriver _VkDriver;
+
+            Math::vec2i _windowSize;
         public:
 
             Window(const Window&) = delete;

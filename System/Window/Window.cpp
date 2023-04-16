@@ -1,5 +1,5 @@
 #include "Window.hpp"
-
+#include <iostream>
 namespace Engine{
     namespace Window {
 
@@ -17,7 +17,8 @@ namespace Engine{
 
             if(!glfwInit())
                 throw std::runtime_error("glfwInit() return false.");
-            
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
             for(const auto& pair: settings)
             {
                 glfwWindowHint(pair.first, pair.second);
@@ -25,6 +26,7 @@ namespace Engine{
             
             _window_title.swap(title);
             _window = glfwCreateWindow(size.x, size.y, _window_title.c_str(), monitor, 0);
+            _windowSize = size;
 
             if(!_window)
             {
@@ -32,13 +34,7 @@ namespace Engine{
                 throw std::runtime_error("glfwCreateWindow() return NULL");
             }
 
-            _VkDriver.init(std::vector<const char*>{});
-            glfwCreateWindowSurface(
-                _VkDriver.instance,
-                _window,
-                0,
-                &_VkDriver.surface
-            );
+            _VkDriver.init(std::vector<const char*>{}, std::vector<const char*>{VK_KHR_SWAPCHAIN_EXTENSION_NAME}, _window, size);
         }
 
         Engine::IODevices::Event waitEvent()
