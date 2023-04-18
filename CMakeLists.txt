@@ -31,7 +31,6 @@ if (UNIX)
 	set(OTHER_LIB "")
 endif(UNIX)
 
-#///
 include_directories(${INCLUDE_DIR} ./)
 
 set(DiscordRPC "System/DiscordRPC")

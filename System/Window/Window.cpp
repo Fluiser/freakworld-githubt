@@ -34,7 +34,8 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
                 throw std::runtime_error("glfwCreateWindow() return NULL");
             }
 
-            _VkDriver.init(std::vector<const char*>{}, std::vector<const char*>{VK_KHR_SWAPCHAIN_EXTENSION_NAME}, _window, size);
+            _VkDriver.init(std::vector<const char*>{}, std::vector<const char*>{VK_KHR_SWAPCHAIN_EXTENSION_NAME}, _window);
+            _VkDriver.initFrameBuffer(size.x, size.y);
         }
 
         Engine::IODevices::Event waitEvent()

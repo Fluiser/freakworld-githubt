@@ -18,6 +18,9 @@ namespace Engine {
 
             class VulkanDriver {
                 std::vector<Engine::System::Graphics::RenderPool> _render_queue;
+
+                uint32_t _idxFamilyPresent;
+                uint32_t _idxFamilyRender;
             protected:
 
                 friend Window;
@@ -30,6 +33,10 @@ namespace Engine {
 
                 VkInstance _instance;
                 VkSurfaceKHR _surface;
+
+                VkFormat _format;
+                std::vector<VkImage> _swapchain_images; // Why are you swapchain, but I save all frames in images?
+                std::vector<VkImageView> _swapchain_images_view;
                 VkSwapchainKHR _swapchain;
 
                 VkApplicationInfo _appInfo;
@@ -43,7 +50,8 @@ namespace Engine {
                 VulkanDriver();
                 ~VulkanDriver();
                 
-                void init(std::vector<const char*> req_extension, std::vector<const char*> deviceExtension, GLFWwindow* window, Math::vec2i size);
+                void init(std::vector<const char*> req_extension, std::vector<const char*> deviceExtension, GLFWwindow* window);
+                void initFrameBuffer(uint32_t w_x, uint32_t w_y);
             };
 
         }
