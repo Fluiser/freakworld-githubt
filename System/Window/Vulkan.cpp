@@ -260,6 +260,7 @@ namespace Engine
                 for(size_t i = 0; i < _swapchain_images.size(); ++i)
                 {
                     VkImageViewCreateInfo crinfo;
+                    ZeroMem(crinfo);
                     crinfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
                     crinfo.image = _swapchain_images[i];
                     crinfo.viewType = VK_IMAGE_VIEW_TYPE_2D; // @viewtype
@@ -275,6 +276,7 @@ namespace Engine
                     crinfo.subresourceRange.levelCount = 1;
                     crinfo.subresourceRange.baseArrayLayer = 0;
                     crinfo.subresourceRange.layerCount = 1;
+
 
                     CHECK_VULKAN_CALLBACK(vkCreateImageView(_device, &crinfo, nullptr, &_swapchain_images_view[i]));
                 }
