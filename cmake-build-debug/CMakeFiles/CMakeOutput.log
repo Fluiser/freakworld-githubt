@@ -1,0 +1,101 @@
+The system is: Windows - 10.0.19043 - AMD64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/cl.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Оптимизирующий компилятор Microsoft (R) C/C++ версии 19.29.30136 для x64
+(C) Корпорация Майкрософт (Microsoft Corporation).  Все права защищены.
+
+CMakeCCompilerId.c
+Microsoft (R) Incremental Linker Version 14.29.30136.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:CMakeCCompilerId.exe 
+CMakeCCompilerId.obj 
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.exe"
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.obj"
+
+The C compiler identification is MSVC, found in "F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/3.17.3/CompilerIdC/CMakeCCompilerId.exe"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/cl.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Оптимизирующий компилятор Microsoft (R) C/C++ версии 19.29.30136 для x64
+(C) Корпорация Майкрософт (Microsoft Corporation).  Все права защищены.
+
+CMakeCXXCompilerId.cpp
+Microsoft (R) Incremental Linker Version 14.29.30136.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:CMakeCXXCompilerId.exe 
+CMakeCXXCompilerId.obj 
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.exe"
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.obj"
+
+The CXX compiler identification is MSVC, found in "F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/3.17.3/CompilerIdCXX/CMakeCXXCompilerId.exe"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):nmake /nologo cmTC_cc4b0\fast && 	D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\HostX64\x64\nmake.exe  -f CMakeFiles\cmTC_cc4b0.dir\build.make /nologo -L                  CMakeFiles\cmTC_cc4b0.dir\build
+Building C object CMakeFiles/cmTC_cc4b0.dir/testCCompiler.c.obj
+	D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\cl.exe @F:\TEMP\nm44D0.tmp
+testCCompiler.c
+Linking C executable cmTC_cc4b0.exe
+	"D:\soft\CLion 2020.2.5\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_cc4b0.dir --rc="D:\Windows Kits\10\bin\10.0.19041.0\x64\rc.exe" --mt="D:\Windows Kits\10\bin\10.0.19041.0\x64\mt.exe" --manifests  -- D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_cc4b0.dir\objects1.rsp @F:\TEMP\nm4668.tmp
+	C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file F:/github/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/CMakeTmp/cmTC_cc4b0.exe -installedDir F:/github/vcpkg/installed/x64-windows/debug/bin -OutVariable out
+
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):nmake /nologo cmTC_ce5cd\fast && 	D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\HostX64\x64\nmake.exe  -f CMakeFiles\cmTC_ce5cd.dir\build.make /nologo -L                  CMakeFiles\cmTC_ce5cd.dir\build
+Building C object CMakeFiles/cmTC_ce5cd.dir/CMakeCCompilerABI.c.obj
+	D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\cl.exe @F:\TEMP\nm4ADB.tmp
+CMakeCCompilerABI.c
+Linking C executable cmTC_ce5cd.exe
+	"D:\soft\CLion 2020.2.5\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_ce5cd.dir --rc="D:\Windows Kits\10\bin\10.0.19041.0\x64\rc.exe" --mt="D:\Windows Kits\10\bin\10.0.19041.0\x64\mt.exe" --manifests  -- D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_ce5cd.dir\objects1.rsp @F:\TEMP\nm4B2A.tmp
+	C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file F:/github/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/CMakeTmp/cmTC_ce5cd.exe -installedDir F:/github/vcpkg/installed/x64-windows/debug/bin -OutVariable out
+
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):nmake /nologo cmTC_cab99\fast && 	D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\HostX64\x64\nmake.exe  -f CMakeFiles\cmTC_cab99.dir\build.make /nologo -L                  CMakeFiles\cmTC_cab99.dir\build
+Building CXX object CMakeFiles/cmTC_cab99.dir/testCXXCompiler.cxx.obj
+	D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\cl.exe @F:\TEMP\nm4DBA.tmp
+testCXXCompiler.cxx
+Linking CXX executable cmTC_cab99.exe
+	"D:\soft\CLion 2020.2.5\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_cab99.dir --rc="D:\Windows Kits\10\bin\10.0.19041.0\x64\rc.exe" --mt="D:\Windows Kits\10\bin\10.0.19041.0\x64\mt.exe" --manifests  -- D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_cab99.dir\objects1.rsp @F:\TEMP\nm4DF9.tmp
+	C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file F:/github/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/CMakeTmp/cmTC_cab99.exe -installedDir F:/github/vcpkg/installed/x64-windows/debug/bin -OutVariable out
+
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):nmake /nologo cmTC_9fe44\fast && 	D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\HostX64\x64\nmake.exe  -f CMakeFiles\cmTC_9fe44.dir\build.make /nologo -L                  CMakeFiles\cmTC_9fe44.dir\build
+Building CXX object CMakeFiles/cmTC_9fe44.dir/CMakeCXXCompilerABI.cpp.obj
+	D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\cl.exe @F:\TEMP\nm5079.tmp
+CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_9fe44.exe
+	"D:\soft\CLion 2020.2.5\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_9fe44.dir --rc="D:\Windows Kits\10\bin\10.0.19041.0\x64\rc.exe" --mt="D:\Windows Kits\10\bin\10.0.19041.0\x64\mt.exe" --manifests  -- D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_9fe44.dir\objects1.rsp @F:\TEMP\nm50B8.tmp
+	C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file F:/github/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/CMakeTmp/cmTC_9fe44.exe -installedDir F:/github/vcpkg/installed/x64-windows/debug/bin -OutVariable out
+
+
+

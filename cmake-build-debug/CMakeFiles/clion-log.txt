@@ -1,0 +1,7 @@
+D:\soft\cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" F:\github\freakworld-githubt
+-- Found SFML 2.5.1 in D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include/SFML/lib/cmake/SFML
+LNK:System/DiscordRPC/achievement_manager.cppSystem/DiscordRPC/achievement_manager.hSystem/DiscordRPC/activity_manager.cppSystem/DiscordRPC/activity_manager.hSystem/DiscordRPC/application_manager.cppSystem/DiscordRPC/application_manager.hSystem/DiscordRPC/core.cppSystem/DiscordRPC/core.hSystem/DiscordRPC/image_manager.cppSystem/DiscordRPC/image_manager.hSystem/DiscordRPC/lobby_manager.cppSystem/DiscordRPC/lobby_manager.hSystem/DiscordRPC/network_manager.cppSystem/DiscordRPC/network_manager.hSystem/DiscordRPC/overlay_manager.cppSystem/DiscordRPC/overlay_manager.hSystem/DiscordRPC/relationship_manager.cppSystem/DiscordRPC/relationship_manager.hSystem/DiscordRPC/storage_manager.cppSystem/DiscordRPC/storage_manager.hSystem/DiscordRPC/store_manager.cppSystem/DiscordRPC/store_manager.hSystem/DiscordRPC/types.cppSystem/DiscordRPC/types.hSystem/DiscordRPC/user_manager.cppSystem/DiscordRPC/user_manager.hSystem/DiscordRPC/voice_manager.cppSystem/DiscordRPC/voice_manager.h
+DLLLIB:F:/github/freakworld-githubt/System/DiscordRPC/lib/discord_game_sdk.dll.lib
+-- Configuring done (0.5s)
+-- Generating done (0.0s)
+-- Build files have been written to: F:/github/freakworld-githubt/cmake-build-debug

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="freakWorld"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="msvc8"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\vcpkg\;CMake Files\..\vcpkg\scripts\;CMake Files\..\vcpkg\scripts\buildsystems\;CMake Files\..\vcpkg\installed\;CMake Files\..\vcpkg\installed\x64-windows\;CMake Files\..\vcpkg\installed\x64-windows\share\;CMake Files\..\vcpkg\installed\x64-windows\share\glfw3\;CMake Files\soft\;CMake Files\soft\VisualStudio\;CMake Files\soft\VisualStudio\VC\;CMake Files\soft\VisualStudio\VC\Tools\;CMake Files\soft\VisualStudio\VC\Tools\MSVC\;CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\;CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include\;CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include\SFML\;CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include\SFML\lib\;CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include\SFML\lib\cmake\;CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include\SFML\lib\cmake\SFML\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="F:/github/freakworld-githubt/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 all"/>
+					<CompileFile command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="freakWorld">
+				<Option output="F:/github/freakworld-githubt/cmake-build-debug/freakWorld.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="F:/github/freakworld-githubt/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-DWIN32=TRUE"/>
+					<Add option="-DSFML_STATIC"/>
+					<Add option="-DGLFW_DLL"/>
+					<Add directory="F:/github/freakworld-githubt/."/>
+					<Add directory="D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include"/>
+					<Add directory="D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include/SFML/include"/>
+					<Add directory="F:/github/vcpkg/installed/x64-windows/include"/>
+					<Add directory="D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\ATLMFC\include"/>
+					<Add directory="D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 freakWorld"/>
+					<CompileFile command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="freakWorld/fast">
+				<Option output="F:/github/freakworld-githubt/cmake-build-debug/freakWorld.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="F:/github/freakworld-githubt/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-DWIN32=TRUE"/>
+					<Add option="-DSFML_STATIC"/>
+					<Add option="-DGLFW_DLL"/>
+					<Add directory="F:/github/freakworld-githubt/."/>
+					<Add directory="D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include"/>
+					<Add directory="D:/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include/SFML/include"/>
+					<Add directory="F:/github/vcpkg/installed/x64-windows/include"/>
+					<Add directory="D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\ATLMFC\include"/>
+					<Add directory="D:\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 freakWorld/fast"/>
+					<CompileFile command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="F:/github/freakworld-githubt/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 edit_cache"/>
+					<CompileFile command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="F:/github/freakworld-githubt/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f F:\github\freakworld-githubt\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="F:/github/freakworld-githubt/System/IODevices/Event.cpp">
+			<Option target="freakWorld"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/System/IODevices/Event.hpp">
+			<Option target="freakWorld"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/System/Window/Vulkan.cpp">
+			<Option target="freakWorld"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/System/Window/Vulkan.hpp">
+			<Option target="freakWorld"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/System/Window/Window.cpp">
+			<Option target="freakWorld"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/System/Window/Window.hpp">
+			<Option target="freakWorld"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/main.cpp">
+			<Option target="freakWorld"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/../vcpkg/scripts/buildsystems/vcpkg.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\scripts\buildsystems\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/../vcpkg/installed/x64-windows/share/glfw3/glfw3Config.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\glfw3\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/../vcpkg/installed/x64-windows/share/glfw3/glfw3ConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\glfw3\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/../vcpkg/installed/x64-windows/share/glfw3/glfw3Targets-debug.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\glfw3\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/../vcpkg/installed/x64-windows/share/glfw3/glfw3Targets-release.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\glfw3\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/../vcpkg/installed/x64-windows/share/glfw3/glfw3Targets.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\glfw3\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include/SFML/lib/cmake/SFML/SFMLConfig.cmake">
+			<Option virtualFolder="CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include\SFML\lib\cmake\SFML\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include/SFML/lib/cmake/SFML/SFMLConfigDependencies.cmake">
+			<Option virtualFolder="CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include\SFML\lib\cmake\SFML\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include/SFML/lib/cmake/SFML/SFMLConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include\SFML\lib\cmake\SFML\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include/SFML/lib/cmake/SFML/SFMLStaticTargets-debug.cmake">
+			<Option virtualFolder="CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include\SFML\lib\cmake\SFML\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include/SFML/lib/cmake/SFML/SFMLStaticTargets-release.cmake">
+			<Option virtualFolder="CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include\SFML\lib\cmake\SFML\"/>
+		</Unit>
+		<Unit filename="F:/github/freakworld-githubt/soft/VisualStudio/VC/Tools/MSVC/14.29.30133/include/SFML/lib/cmake/SFML/SFMLStaticTargets.cmake">
+			<Option virtualFolder="CMake Files\soft\VisualStudio\VC\Tools\MSVC\14.29.30133\include\SFML\lib\cmake\SFML\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
