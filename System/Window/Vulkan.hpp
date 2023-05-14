@@ -7,8 +7,8 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <string>
-#include <System/Graphics/System/RenderPool.hpp>
 #include <System/Util.hpp>
+#include <System/Graphics/GraphicsPipeline.hpp>
 
 
 namespace Engine {
@@ -17,7 +17,6 @@ namespace Engine {
         namespace Wrapper {
 
             class VulkanDriver {
-                std::vector<Engine::System::Graphics::RenderPool> _render_queue;
 
                 uint32_t _idxFamilyPresent;
                 uint32_t _idxFamilyRender;
@@ -38,6 +37,8 @@ namespace Engine {
                 std::vector<VkImage> _swapchain_images; // Why are you swapchain, but I save all frames in images?
                 std::vector<VkImageView> _swapchain_images_view;
                 VkSwapchainKHR _swapchain;
+
+                std::vector<Engine::System::Graphics::Pipeline> pipelines;
 
                 VkApplicationInfo _appInfo;
 

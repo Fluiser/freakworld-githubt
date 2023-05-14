@@ -4,23 +4,7 @@
 #include <iostream>
 #include <optional>
 #include <set>
-#define CHECK_VULKAN_CALLBACK(CB)                         \
-    {                                                     \
-        auto result = CB;                                 \
-        if (result != VK_SUCCESS)                         \
-        {                                                 \
-            std::cout << #CB ": " << (int)result << "\n"; \
-        }                                                 \
-    }
-#define CRITICAL_VULKAN_CALLBACK(CB)                                           \
-    {                                                                          \
-        auto res = CB;                                                         \
-        if (res != VK_SUCCESS)                                                 \
-        {                                                                      \
-            std::string str = #CB " return :"; str += std::to_string((int)res); \
-            CRITICAL_ERROR(str.c_str())                                        \
-        }                                                                      \
-    }
+
 
 namespace Engine
 {
@@ -32,11 +16,11 @@ namespace Engine
             VulkanDriver::VulkanDriver() {}
             VulkanDriver::~VulkanDriver()
             {
-                vkDestroySwapchainKHR(_device, _swapchain, nullptr);
                 for(auto& img: _swapchain_images_view)
                 {
                     vkDestroyImageView(_device, img, nullptr);
                 }
+                vkDestroySwapchainKHR(_device, _swapchain, nullptr);
                 vkDestroyDevice(_device, nullptr);
                 vkDestroySurfaceKHR(_instance, _surface, nullptr);
                 vkDestroyInstance(_instance, nullptr);
@@ -220,9 +204,9 @@ namespace Engine
                 crsc.imageFormat = _format = VK_FORMAT_R8G8B8A8_SRGB;
                 crsc.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                 crsc.imageExtent = extent;
-                crsc.imageArrayLayers = 1;
-                crsc.presentMode = presentMode;
-                crsc.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT; // Пока у нас одноуровневый рендер.
+                crsc.imageArrayLayers = 1; ////////////////////////////// <.
+                crsc.presentMode = presentMode;//                          |
+                crsc.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT; // Пока у нас однослойный рендер.
                 // Но это не значит, что он будет таким всегда. //@imageUsage
                 DEB_LOG(    "VkSwapchainCreateInfo.minImageCount: " <<
                             crsc.minImageCount <<
@@ -280,11 +264,8 @@ namespace Engine
 
                     CHECK_VULKAN_CALLBACK(vkCreateImageView(_device, &crinfo, nullptr, &_swapchain_images_view[i]));
                 }
-
+                
             }
         }
     }
 }
-
-#undef CHECK_VULKAN_CALLBACK
-#undef CRITICAL_VULKAN_CALLBACK

@@ -47,14 +47,21 @@ endif()
 
 message(LNK: ${DISCORD_LNK}\n DLL LIB: ${DISCORD_DLL})
 
+# shader path
+set(SHADER_LIST ${CMAKE_CURRENT_SOURCE_DIR}/System/Graphics/fragmentShader
+				${CMAKE_CURRENT_SOURCE_DIR}/System/Graphics/vertexShader
+				${CMAKE_CURRENT_SOURCE_DIR}/System/Graphics/tesselationShader)
+
 add_executable(freakWorld
 		System/Window/Vulkan.hpp						System/Window/Vulkan.cpp
 		System/Window/Window.hpp						System/Window/Window.cpp 
 		System/IODevices/Event.hpp						System/IODevices/Event.cpp 
+
+		System/Graphics/Shader.hpp						System/Graphics/Shader.cpp
 
 		main.cpp
 )
 
 find_package(glfw3 CONFIG REQUIRED)
 find_package(Vulkan REQUIRED)
-target_link_libraries(freakWorld sfml-graphics sfml-audio sfml-window sfml-system ${Boost_LIBRARIES} ${OTHER_LIB} glfw Vulkan::Vulkan)
+target_link_libraries(freakWorld ${SHADER_LIST} sfml-graphics sfml-audio sfml-window sfml-system ${Boost_LIBRARIES} ${OTHER_LIB} glfw Vulkan::Vulkan)

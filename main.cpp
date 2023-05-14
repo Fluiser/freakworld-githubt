@@ -2,12 +2,15 @@
 #include <thread>
 #include <chrono>
 #include <iostream>
+#include <System/Graphics/Shader.hpp>
 
 int main()
 {
 	Engine::Window::Window window;
 
 	window.init({1280, 720}, "hell");
+
+	std::cout << _binary_fragmentShader_start;
 
 	while(!window.ShouldClose())
 	{

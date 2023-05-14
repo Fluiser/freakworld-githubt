@@ -123,3 +123,20 @@ void ZeroMem(T& v)
 {
 	memset((void*)&v, 0, sizeof(v));
 }
+#define CHECK_VULKAN_CALLBACK(CB)                         \
+    {                                                     \
+        auto result = CB;                                 \
+        if (result != VK_SUCCESS)                         \
+        {                                                 \
+            std::cout << #CB ": " << (int)result << "\n"; \
+        }                                                 \
+    }
+#define CRITICAL_VULKAN_CALLBACK(CB)                                           \
+    {                                                                          \
+        auto res = CB;                                                         \
+        if (res != VK_SUCCESS)                                                 \
+        {                                                                      \
+            std::string str = #CB " return :"; str += std::to_string((int)res); \
+            CRITICAL_ERROR(str.c_str())                                        \
+        }                                                                      \
+    }
