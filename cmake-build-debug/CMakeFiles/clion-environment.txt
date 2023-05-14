@@ -1,4 +1,0 @@
-ToolSet: 16.0 (local)@D:\soft\VisualStudio
-Options: msvc.arch=amd64
-
-Options:

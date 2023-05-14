@@ -1,3 +1,0 @@
-F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/freakWorld.dir
-F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/edit_cache.dir
-F:/github/freakworld-githubt/cmake-build-debug/CMakeFiles/rebuild_cache.dir
