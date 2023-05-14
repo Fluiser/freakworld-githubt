@@ -9,16 +9,13 @@ namespace Engine {
             class Shader {
                 bool _isBinary = false;
                 std::vector<char> _program;
+            public:
                 VkShaderModule _shaderModule = nullptr;
 
-                VkDevice _p_dev;
-            public:
-
                 Shader() = default;
-                ~Shader();
+                ~Shader() = default;
 
-                VkShaderModule& get();
-                const VkShaderModule& get() const;
+                void destroy(VkDevice);
 
                 bool isComplete() const noexcept;
 

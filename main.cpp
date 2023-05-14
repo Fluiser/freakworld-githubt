@@ -10,8 +10,6 @@ int main()
 
 	window.init({1280, 720}, "hell");
 
-	std::cout << _binary_fragmentShader_start;
-
 	while(!window.ShouldClose())
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));

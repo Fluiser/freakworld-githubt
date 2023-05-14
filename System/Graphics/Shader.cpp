@@ -6,10 +6,10 @@ namespace Engine {
     namespace System {
         namespace Graphics {
 
-            Shader::~Shader()
+            void Shader::destroy(VkDevice dev)
             {
                 if(_isBinary)
-                    vkDestroyShaderModule(_p_dev, _shaderModule, nullptr);
+                    vkDestroyShaderModule(dev, _shaderModule, nullptr);
             }
 
             bool Shader::isComplete() const noexcept
@@ -19,7 +19,6 @@ namespace Engine {
 
             void Shader::createFromFile(VkDevice device, std::string path)
             {
-                _p_dev = device;
                 std::ifstream file(path, std::ios::binary);
                 _program.insert(_program.begin(), std::istreambuf_iterator<char>(file), {});
                 
@@ -35,7 +34,6 @@ namespace Engine {
 
             void Shader::createFromMemory(VkDevice device, const char* mem, size_t size)
             {
-                _p_dev = device;
                 _program.resize(size);
                 memcpy(_program.data(), mem, size);
 

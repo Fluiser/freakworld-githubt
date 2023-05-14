@@ -265,6 +265,8 @@ namespace Engine
                     CHECK_VULKAN_CALLBACK(vkCreateImageView(_device, &crinfo, nullptr, &_swapchain_images_view[i]));
                 }
                 
+                pipelines.emplace_back();
+                pipelines.back().initPipeline(_device, extent);
             }
         }
     }

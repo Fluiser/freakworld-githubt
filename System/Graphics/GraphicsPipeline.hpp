@@ -8,6 +8,7 @@ namespace Engine {
         namespace Graphics {
 
             class Pipeline {
+                VkDevice _device;
             public:
 
                 std::vector<Engine::System::Graphics::Shader> shaders;
@@ -15,7 +16,7 @@ namespace Engine {
                 Pipeline() = default;
                 ~Pipeline();
 
-                void initPipeline();
+                void initPipeline(VkDevice, VkExtent2D, unsigned multisampling = 0);
 
 
             };
