@@ -1,8 +1,0 @@
-{
-"variables": [
-    {
-      "name": "CMAKE_TOOLCHAIN_FILE",
-      "value": "F:/github/vcpkg/scripts/buildsystems/vcpkg.cmake"
-    }
-]
-}
