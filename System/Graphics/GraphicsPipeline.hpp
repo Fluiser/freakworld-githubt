@@ -9,6 +9,13 @@ namespace Engine {
 
             class Pipeline {
                 VkDevice _device;
+
+                // static inline int countPipelines = 0;
+                // static inline VkPipeline graphicsPipeline = nullptr;
+                VkPipeline _graphicsPipeline;
+                VkPipelineLayout _pipeLayout;
+                VkRenderPass _renderPass;
+
             public:
 
                 std::vector<Engine::System::Graphics::Shader> shaders;
@@ -16,8 +23,9 @@ namespace Engine {
                 Pipeline() = default;
                 ~Pipeline();
 
-                void initPipeline(VkDevice, VkExtent2D, unsigned multisampling = 0);
+                void initPipeline(VkDevice, VkExtent2D, VkFormat, unsigned multisampling = 0);
 
+                // static void initGraphicsPipeline(Pipeline*, size_t);
 
             };
 

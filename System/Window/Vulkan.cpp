@@ -261,12 +261,12 @@ namespace Engine
                     crinfo.subresourceRange.baseArrayLayer = 0;
                     crinfo.subresourceRange.layerCount = 1;
 
-
                     CHECK_VULKAN_CALLBACK(vkCreateImageView(_device, &crinfo, nullptr, &_swapchain_images_view[i]));
                 }
                 
                 pipelines.emplace_back();
-                pipelines.back().initPipeline(_device, extent);
+                pipelines.back().initPipeline(_device, extent, _format);
+                
             }
         }
     }

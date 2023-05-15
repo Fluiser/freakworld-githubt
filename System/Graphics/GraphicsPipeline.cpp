@@ -9,19 +9,24 @@ namespace Engine {
     namespace System {
         namespace Graphics {
             
+
             Pipeline::~Pipeline()
             {
                 for(auto& s: shaders)
                 {
                     s.destroy(_device);
                 }
+                vkDestroyPipelineLayout(_device, _pipeLayout, nullptr);
+                vkDestroyRenderPass(_device, _renderPass, nullptr);
             }
 
             void Pipeline::initPipeline(
                 VkDevice device,
                 VkExtent2D extent,
+                VkFormat format,
                 unsigned multisamplingOption)
             {
+                _device = device;
 ///////////////////////////////SHADERS////////////////////////////////
                 for(auto& s: shaders)
                     s.destroy(device);
@@ -39,6 +44,7 @@ namespace Engine {
                 vrx.pName = ProgramEntryName;
 
                 VkPipelineShaderStageCreateInfo frag;
+                ZeroMem(frag);
                 frag.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
                 frag.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
                 shaders.emplace_back();
@@ -46,6 +52,8 @@ namespace Engine {
                 fragShader.createFromFile(device, "frag.spv");
                 frag.module = fragShader._shaderModule;
                 frag.pName = ProgramEntryName;
+
+                VkPipelineShaderStageCreateInfo shaderStages[] = {vrx, frag}; 
 //////////////////////////////////pipeline////////////////////////////////////////////
                 VkPipelineVertexInputStateCreateInfo vertexIInfo;
                 ZeroMem(vertexIInfo);
@@ -98,7 +106,109 @@ namespace Engine {
                 multisampling.alphaToCoverageEnable = VK_TRUE;
                 multisampling.alphaToOneEnable = VK_FALSE;
 
-                
+                VkPipelineColorBlendAttachmentState crBlendAttachment;
+                ZeroMem(crBlendAttachment);
+                crBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+                crBlendAttachment.blendEnable = VK_FALSE;
+                // if blendEnable is VK_TRUE
+                crBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+                crBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                crBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+                crBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                crBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+                crBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
+                ///////////////////////////////////////
+
+                VkPipelineColorBlendStateCreateInfo colorBlending;
+                ZeroMem(colorBlending);
+                colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+                colorBlending.logicOpEnable = VK_FALSE;
+                colorBlending.logicOp = VK_LOGIC_OP_COPY;
+                colorBlending.attachmentCount = 1;
+                colorBlending.pAttachments = &crBlendAttachment;
+
+#ifdef __VULKAN_DYNAMIC_LINE
+                VkDynamicState __states = VK_DYNAMIC_STATE_LINE_WIDTH;
+                VkPipelineDynamicStateCreateInfo DSCI;
+                ZeroMem(DSCI);
+                DSCI.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+                DSCI.dynamicStateCount = 1;
+                DSCI.pDynamicStates = &__states;
+#endif
+                VkPipelineLayoutCreateInfo pipelayout;
+                ZeroMem(pipelayout);
+                pipelayout.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+                CRITICAL_VULKAN_CALLBACK(vkCreatePipelineLayout(_device, &pipelayout, nullptr, &_pipeLayout));
+
+                VkAttachmentDescription colorAttachment;
+                ZeroMem(colorAttachment);
+                colorAttachment.format = format;
+                colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+                colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+
+                colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+
+                colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+                //@ColorAttachments
+                VkAttachmentReference colorAttachmentRef;
+                colorAttachmentRef.attachment = 0;
+                colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+                VkSubpassDescription subpass;
+                ZeroMem(subpass);
+                subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+                subpass.colorAttachmentCount = 1;
+                subpass.pColorAttachments = &colorAttachmentRef;
+
+                VkRenderPassCreateInfo renderPassInfo;
+                ZeroMem(renderPassInfo);
+                renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+                renderPassInfo.attachmentCount = 1;
+                renderPassInfo.pAttachments = &colorAttachment;
+                renderPassInfo.subpassCount = 1;
+                renderPassInfo.pSubpasses = &subpass;
+
+                CRITICAL_VULKAN_CALLBACK(vkCreateRenderPass(_device, &renderPassInfo, nullptr, &_renderPass));
+
+                VkGraphicsPipelineCreateInfo pipelineInfo;
+                ZeroMem(pipelineInfo);
+                pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+                pipelineInfo.stageCount = 2;
+                pipelineInfo.pStages = shaderStages;
+
+                pipelineInfo.pVertexInputState = &vertexIInfo;
+                pipelineInfo.pInputAssemblyState = &assemblyIInfo;
+                pipelineInfo.pViewportState = &viewportstate;
+                pipelineInfo.pRasterizationState = &raster;
+                pipelineInfo.pMultisampleState = &multisampling;
+                pipelineInfo.pDepthStencilState = nullptr;
+                pipelineInfo.pColorBlendState = &colorBlending;
+                pipelineInfo.pTessellationState = nullptr;
+#ifdef __VULKAN_DYNAMIC_LINE
+                pipelineInfo.pDynamicState = &DSCI;
+#else
+                pipelineInfo.pDynamicState = nullptr;
+#endif
+                pipelineInfo.layout = _pipeLayout;
+                pipelineInfo.renderPass = _renderPass;
+                pipelineInfo.subpass = 0;
+
+                //@pipeline
+                pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+                pipelineInfo.basePipelineIndex = -1;
+                /*
+                    @initGraphicsPipeline
+                    Хоть и смысл в том, что может быть много граф. конвеейеров,
+                    но на данный момент это не нужно и пока не реализовано.
+
+                    Надо вынести все требующиеся аргументы в члены класса, потому как вызвать vkCreateGraphisPipelines с структурами, которые удалены - не очень хорошая идея.
+                    @костыль
+                */
+                CRITICAL_VULKAN_CALLBACK(vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &_graphicsPipeline));           
             }
         }
     }
