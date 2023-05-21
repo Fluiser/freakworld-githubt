@@ -16,6 +16,10 @@ namespace Engine {
                 VkPipelineLayout _pipeLayout;
                 VkRenderPass _renderPass;
 
+                VkExtent2D _extent;
+
+                std::vector<VkFramebuffer> _swapchain_framebuffers;
+                std::vector<VkCommandBuffer> _commandBuffers;
             public:
 
                 std::vector<Engine::System::Graphics::Shader> shaders;
@@ -24,6 +28,13 @@ namespace Engine {
                 ~Pipeline();
 
                 void initPipeline(VkDevice, VkExtent2D, VkFormat, unsigned multisampling = 0);
+                void initFramebuffers(std::vector<VkImageView>&, VkExtent2D);
+                void initCommandBuffers(VkCommandPool cmdPool);
+
+                void beginCommands(); // NEED SYNC
+                void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance);
+                void endCommands(); // NEED SYNC
+
 
                 // static void initGraphicsPipeline(Pipeline*, size_t);
 

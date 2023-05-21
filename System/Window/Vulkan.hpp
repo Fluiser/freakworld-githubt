@@ -30,15 +30,19 @@ namespace Engine {
                 VkQueue _renderq;
                 VkQueue _presentq;
 
+                VkCommandPool _renderPool;
+                VkCommandPool _presentPool;
+
                 VkInstance _instance;
                 VkSurfaceKHR _surface;
 
                 VkFormat _format;
                 std::vector<VkImage> _swapchain_images; // Why are you swapchain, but I save all frames in images?
-                std::vector<VkImageView> _swapchain_images_view;
+                std::vector<VkImageView> _swapchain_images_views;
+
                 VkSwapchainKHR _swapchain;
 
-                std::vector<Engine::System::Graphics::Pipeline> pipelines;
+                std::vector<Engine::System::Graphics::Pipeline> _pipelines;
 
                 VkApplicationInfo _appInfo;
 

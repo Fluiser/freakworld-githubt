@@ -16,6 +16,10 @@ namespace Engine {
                 {
                     s.destroy(_device);
                 }
+                for(auto& framebuffer: _swapchain_framebuffers)
+                {
+                    vkDestroyFramebuffer(_device, framebuffer, nullptr);
+                }
                 vkDestroyPipelineLayout(_device, _pipeLayout, nullptr);
                 vkDestroyRenderPass(_device, _renderPass, nullptr);
             }
@@ -26,6 +30,7 @@ namespace Engine {
                 VkFormat format,
                 unsigned multisamplingOption)
             {
+                _extent = extent;
                 _device = device;
 ///////////////////////////////SHADERS////////////////////////////////
                 for(auto& s: shaders)
@@ -144,7 +149,7 @@ namespace Engine {
                 ZeroMem(colorAttachment);
                 colorAttachment.format = format;
                 colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-                colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD; // VK_ATTACHMENT_LOAD_OP_CLEAR, если во время каждого прохода нужно очищать фреймбуфер
                 colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 
                 colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -209,6 +214,84 @@ namespace Engine {
                     @костыль
                 */
                 CRITICAL_VULKAN_CALLBACK(vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &_graphicsPipeline));           
+            }
+
+            void Pipeline::initFramebuffers(std::vector<VkImageView>& swapchainImageView, VkExtent2D extent)
+            {
+                _swapchain_framebuffers.resize(swapchainImageView.size());
+                for(size_t i = 0; i < swapchainImageView.size(); ++i)
+                {
+                    VkFramebufferCreateInfo createInfo;
+                    ZeroMem(createInfo);
+                    createInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+                    createInfo.renderPass = _renderPass;
+                    createInfo.attachmentCount = 1;
+                    createInfo.pAttachments = &swapchainImageView[i];
+                    createInfo.width = extent.width;
+                    createInfo.height = extent.height;
+                    createInfo.layers = 1;
+
+                    CHECK_VULKAN_CALLBACK(vkCreateFramebuffer(_device, &createInfo, nullptr, &_swapchain_framebuffers[i]));
+                }
+            }
+
+            void Pipeline::initCommandBuffers(VkCommandPool cmdPool)
+            {
+                _commandBuffers.resize(_swapchain_framebuffers.size());
+
+                VkCommandBufferAllocateInfo info;
+                ZeroMem(info);
+                info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+                info.commandPool = cmdPool;
+                info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+                info.commandBufferCount = (uint32_t)_commandBuffers.size();
+                //Можно создать ещё буффер команд, который будет вспомогательным и будет использованы в первичном буфере для воспроизведения часто используемых команд.
+
+                CRITICAL_VULKAN_CALLBACK(vkAllocateCommandBuffers(_device, &info, _commandBuffers.data()));
+            }
+
+            void Pipeline::endCommands()
+            {
+                for(auto& cmd: _commandBuffers)
+                {
+                    vkCmdEndRenderPass(cmd);
+                    CHECK_VULKAN_CALLBACK(vkEndCommandBuffer(cmd));
+                }
+            }
+
+            void Pipeline::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance)
+            {
+                for(int i = 0; i < _swapchain_framebuffers.size(); ++i)
+                {
+                    vkCmdDraw(_commandBuffers[i], vertexCount, instanceCount, firstVertex, firstInstance);
+                }
+            }  
+
+            void Pipeline::beginCommands()
+            {
+                VkClearValue clearValue = {0.0f, 0.0f, 0.0f, 1.0f};
+                for(int i = 0; i < _swapchain_framebuffers.size(); ++i)
+                {
+                    VkCommandBufferBeginInfo begin;
+                    begin.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+                    begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+                    begin.pInheritanceInfo = nullptr;
+
+                    CHECK_VULKAN_CALLBACK(vkBeginCommandBuffer(_commandBuffers[i], &begin));
+                    
+                    VkRenderPassBeginInfo rpass;
+                    ZeroMem(rpass);
+                    rpass.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+                    rpass.renderPass = _renderPass;
+                    rpass.framebuffer = _swapchain_framebuffers[i];
+                    rpass.renderArea.extent = _extent;
+                    //rpass.renderArea.offset sets from ZeroMem
+                    rpass.clearValueCount = 1;
+                    rpass.pClearValues = &clearValue;
+                    
+                    vkCmdBeginRenderPass(_commandBuffers[i], &rpass, VK_SUBPASS_CONTENTS_INLINE);
+                    vkCmdBindPipeline(_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, _graphicsPipeline);
+                }
             }
         }
     }

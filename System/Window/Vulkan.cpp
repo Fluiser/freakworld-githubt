@@ -16,7 +16,9 @@ namespace Engine
             VulkanDriver::VulkanDriver() {}
             VulkanDriver::~VulkanDriver()
             {
-                for(auto& img: _swapchain_images_view)
+                vkDestroyCommandPool(_device, _renderPool, nullptr);
+                vkDestroyCommandPool(_device, _presentPool, nullptr);
+                for(auto& img: _swapchain_images_views)
                 {
                     vkDestroyImageView(_device, img, nullptr);
                 }
@@ -238,7 +240,7 @@ namespace Engine
                 ////////////////////////////////-- Init images in vector --/////////////////////////////////////////////
                 vkGetSwapchainImagesKHR(_device, _swapchain, &size, nullptr);
                 _swapchain_images.resize(size);
-                _swapchain_images_view.resize(size);
+                _swapchain_images_views.resize(size);
                 vkGetSwapchainImagesKHR(_device, _swapchain, &size, _swapchain_images.data());
 
                 for(size_t i = 0; i < _swapchain_images.size(); ++i)
@@ -261,12 +263,32 @@ namespace Engine
                     crinfo.subresourceRange.baseArrayLayer = 0;
                     crinfo.subresourceRange.layerCount = 1;
 
-                    CHECK_VULKAN_CALLBACK(vkCreateImageView(_device, &crinfo, nullptr, &_swapchain_images_view[i]));
+                    CHECK_VULKAN_CALLBACK(vkCreateImageView(_device, &crinfo, nullptr, &_swapchain_images_views[i]));
                 }
                 
-                pipelines.emplace_back();
-                pipelines.back().initPipeline(_device, extent, _format);
+                _pipelines.emplace_back();
                 
+                auto& basePipeline = _pipelines.back();
+                basePipeline.initPipeline(_device, extent, _format);
+                
+                basePipeline.initFramebuffers(_swapchain_images_views, extent);
+
+                VkCommandPoolCreateInfo renderInfo;
+                VkCommandPoolCreateInfo presentInfo;
+                ZeroMem(renderInfo); ZeroMem(presentInfo);
+
+                presentInfo.sType = renderInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+                
+                presentInfo.flags = 0;
+                renderInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+
+                // presentInfo.queueFamilyIndex = _idxFamilyPresent;
+                renderInfo.queueFamilyIndex = _idxFamilyRender;
+
+                CRITICAL_VULKAN_CALLBACK(vkCreateCommandPool(_device, &renderInfo, nullptr, &_renderPool));
+                // CRITICAL_VULKAN_CALLBACK(vkCreateCommandPool(_device, &presentInfo, nullptr, &_presentPool));
+                
+                basePipeline.initCommandBuffers(_renderPool);
             }
         }
     }
