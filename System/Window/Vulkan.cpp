@@ -57,8 +57,14 @@ namespace Engine
                 crInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
                 crInfo.ppEnabledExtensionNames = req_ext.data();
                 crInfo.enabledExtensionCount = (uint32_t)req_ext.size();
+                #ifdef DEBUG
+                    static std::vector<const char*> validationLayers{"VK_LAYER_KHRONOS_validation"};
+                    crInfo.enabledLayerCount = validationLayers.size();
+                    crInfo.ppEnabledLayerNames = validationLayers.data();
+                #else 
                 crInfo.enabledLayerCount = 0;
                 crInfo.ppEnabledLayerNames = nullptr;
+                #endif
 
                 CHECK_VULKAN_CALLBACK(vkCreateInstance(&crInfo, nullptr, &_instance));
                 CHECK_VULKAN_CALLBACK(glfwCreateWindowSurface(_instance, window, nullptr, &_surface));
@@ -154,6 +160,7 @@ namespace Engine
                 /////////////////////////////////////////////////////////////////////////////
                 VkDeviceCreateInfo devInfo;
                 ZeroMem(devInfo);
+                devInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
                 devInfo.pQueueCreateInfos = crQueue.data();
                 devInfo.queueCreateInfoCount = (uint32_t)crQueue.size();
                 devInfo.pEnabledFeatures = &deviceFeatures;

@@ -113,7 +113,7 @@ template <typename T> void ZeroMem(T &v) { memset((void *)&v, 0, sizeof(v)); }
       SetConsoleTextAttribute(hConsole, 7);                                    \
       std::cout << "[" << __LINE__ << "] " << #CB ": ";                                                   \
       SetConsoleTextAttribute(hConsole, (result == VK_SUCCESS ? 10 : 4));      \
-      std::cout << (result == VK_SUCCESS ? "OK (" : "ERR ") << (int)result     \
+      std::cout << (result == VK_SUCCESS ? "OK (" : "ERR (") << (int)result     \
                 << ")\n";                                                      \
       SetConsoleTextAttribute(hConsole, 7);                                    \
     }                                                                          \
@@ -132,7 +132,7 @@ template <typename T> void ZeroMem(T &v) { memset((void *)&v, 0, sizeof(v)); }
       SetConsoleTextAttribute(hConsole, 7);                                    \
       std::cout << "[" << __LINE__ << "] " << #CB ": ";                                                   \
       SetConsoleTextAttribute(hConsole, (res == VK_SUCCESS ? 10 : 4));         \
-      std::cout << (res == VK_SUCCESS ? "OK (" : "ERR ") << (int)res << ")\n"; \
+      std::cout << (res == VK_SUCCESS ? "OK (" : "ERR (") << (int)res << ")\n"; \
       SetConsoleTextAttribute(hConsole, 7);                                    \
     }                                                                          \
   }
