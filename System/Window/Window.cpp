@@ -38,12 +38,18 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
 #else
             _VkDriver.init(std::vector<const char*>{}, std::vector<const char*>{VK_KHR_SWAPCHAIN_EXTENSION_NAME}, _window);
 #endif
-            _VkDriver.initFrameBuffer(size.x, size.y);
+            _VkDriver.initFrameBuffer(_window);
         }
 
         Engine::IODevices::Event waitEvent()
         {
             return Engine::IODevices::Event{};
+        }
+
+        void Window::display()
+        {
+            _VkDriver.qSumbit();
+            _VkDriver.display();
         }
 
     }

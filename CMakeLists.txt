@@ -21,6 +21,8 @@ set(SFML_DIR ${INCLUDE_DIR}/SFML/lib/cmake/SFML)
 set(SFML_STATIC_LIBRARIES TRUE)
 find_package(SFML 2.5.1 REQUIRED graphics audio window system)
 
+add_compile_definitions(NOMINMAX=TRUE)
+
 if (WIN32)
 	add_compile_definitions(WIN32=TRUE)
 	set(OTHER_LIB "")

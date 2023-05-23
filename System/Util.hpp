@@ -5,7 +5,12 @@
 #ifdef DEBUG
 #include <iostream>
 
-#define DEB_LOG(x) std::cout << x
+#define DEB_LOG(x) {HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);  \
+ SetConsoleTextAttribute(hConsole, 2); \
+ auto& s = std::cout << "[DEBUG]: ";\
+  SetConsoleTextAttribute(hConsole, 7); \
+  s << x; \
+}
 
 #if defined(_MSVC_LANG)
 #define BREAK_POINT DebugBreak()
@@ -127,7 +132,7 @@ template <typename T> void ZeroMem(T &v) { memset((void *)&v, 0, sizeof(v)); }
       str += std::to_string((int)res);                                         \
       CRITICAL_ERROR(str.c_str())                                              \
     } else {                                                                   \
-      SetConsoleTextAttribute(hConsole, 10);                                   \
+      SetConsoleTextAttribute(hConsole, 4);                                   \
       std::cout << "CRITICAL: ";                                               \
       SetConsoleTextAttribute(hConsole, 7);                                    \
       std::cout << "[" << __LINE__ << "] " << #CB ": ";                                                   \

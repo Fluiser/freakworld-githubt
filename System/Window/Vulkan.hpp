@@ -20,7 +20,7 @@ namespace Engine {
 
                 uint32_t _idxFamilyPresent;
                 uint32_t _idxFamilyRender;
-            protected:
+                VkExtent2D _extent;
 
                 friend Window;
 
@@ -46,6 +46,11 @@ namespace Engine {
 
                 VkApplicationInfo _appInfo;
 
+                bool __BigEndian; // if true - format VK_FORMAT_R8G8B8A8_SRGB. or VK_FORMAT_B8G8R8A8_SRGB if false.
+
+            protected:
+                uint32_t getIndexImage(Engine::System::Graphics::Pipeline* = nullptr) const;
+                uint32_t _indexImage;
             public:
                 // inline static int QueueCount = 0;
 
@@ -56,7 +61,10 @@ namespace Engine {
                 ~VulkanDriver();
                 
                 void init(std::vector<const char*> req_extension, std::vector<const char*> deviceExtension, GLFWwindow* window);
-                void initFrameBuffer(uint32_t w_x, uint32_t w_y);
+                void initFrameBuffer(GLFWwindow*);
+
+                void qSumbit(Engine::System::Graphics::Pipeline* = nullptr);
+                void display(Engine::System::Graphics::Pipeline* = nullptr);
             };
 
         }

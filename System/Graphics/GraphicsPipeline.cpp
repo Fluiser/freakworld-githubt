@@ -22,6 +22,8 @@ namespace Engine {
                 }
                 vkDestroyPipelineLayout(_device, _pipeLayout, nullptr);
                 vkDestroyRenderPass(_device, _renderPass, nullptr);
+                vkDestroySemaphore(_device, _imageAvailable, nullptr);
+                vkDestroySemaphore(_device, _renderFinished, nullptr);
             }
 
             void Pipeline::initPipeline(
@@ -169,6 +171,13 @@ namespace Engine {
                 subpass.colorAttachmentCount = 1;
                 subpass.pColorAttachments = &colorAttachmentRef;
 
+                VkSubpassDependency depency;
+                ZeroMem(depency);
+                depency.srcSubpass = VK_SUBPASS_EXTERNAL;
+                depency.dstSubpass = 0;
+                depency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                depency.srcAccessMask = 0;
+
                 VkRenderPassCreateInfo renderPassInfo;
                 ZeroMem(renderPassInfo);
                 renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
@@ -176,6 +185,8 @@ namespace Engine {
                 renderPassInfo.pAttachments = &colorAttachment;
                 renderPassInfo.subpassCount = 1;
                 renderPassInfo.pSubpasses = &subpass;
+                renderPassInfo.dependencyCount = 1;
+                renderPassInfo.pDependencies = &depency;
 
                 CRITICAL_VULKAN_CALLBACK(vkCreateRenderPass(_device, &renderPassInfo, nullptr, &_renderPass));
 
@@ -214,6 +225,13 @@ namespace Engine {
                     @костыль
                 */
                 CRITICAL_VULKAN_CALLBACK(vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &_graphicsPipeline));           
+
+                VkSemaphoreCreateInfo SemaphoreInfo;
+                ZeroMem(SemaphoreInfo);
+                SemaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+                CRITICAL_VULKAN_CALLBACK(vkCreateSemaphore(device, &SemaphoreInfo, nullptr, &_imageAvailable));
+                CRITICAL_VULKAN_CALLBACK(vkCreateSemaphore(device, &SemaphoreInfo, nullptr, &_renderFinished));
             }
 
             void Pipeline::initFramebuffers(std::vector<VkImageView>& swapchainImageView, VkExtent2D extent)
@@ -278,7 +296,7 @@ namespace Engine {
                     begin.pInheritanceInfo = nullptr;
 
                     CHECK_VULKAN_CALLBACK(vkBeginCommandBuffer(_commandBuffers[i], &begin));
-                    
+
                     VkRenderPassBeginInfo rpass;
                     ZeroMem(rpass);
                     rpass.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;

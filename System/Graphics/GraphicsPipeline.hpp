@@ -4,6 +4,11 @@
 #include <System/Graphics/Shader.hpp>
 
 namespace Engine {
+    namespace Window {
+        namespace Wrapper {
+            class VulkanDriver; } 
+        }
+
     namespace System {
         namespace Graphics {
 
@@ -20,6 +25,11 @@ namespace Engine {
 
                 std::vector<VkFramebuffer> _swapchain_framebuffers;
                 std::vector<VkCommandBuffer> _commandBuffers;
+
+                VkSemaphore _imageAvailable;
+                VkSemaphore _renderFinished;
+
+                friend Engine::Window::Wrapper::VulkanDriver;
             public:
 
                 std::vector<Engine::System::Graphics::Shader> shaders;
@@ -34,6 +44,7 @@ namespace Engine {
                 void beginCommands(); // NEED SYNC
                 void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance);
                 void endCommands(); // NEED SYNC
+
 
 
                 // static void initGraphicsPipeline(Pipeline*, size_t);

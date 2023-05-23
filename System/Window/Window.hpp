@@ -41,6 +41,8 @@ namespace Engine{
             Engine::IODevices::Event waitEvent();
             inline bool ShouldClose()
             { return glfwWindowShouldClose(_window); }
+
+            void display();
         };
     }
 }
