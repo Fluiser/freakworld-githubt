@@ -65,6 +65,8 @@ namespace Engine {
 
                 void qSumbit(Engine::System::Graphics::Pipeline* = nullptr);
                 void display(Engine::System::Graphics::Pipeline* = nullptr);
+
+                void draw();
             };
 
         }

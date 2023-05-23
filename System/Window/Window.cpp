@@ -46,6 +46,11 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
             return Engine::IODevices::Event{};
         }
 
+        void Window::draw()
+        {
+            _VkDriver.draw();
+        }
+
         void Window::display()
         {
             _VkDriver.qSumbit();

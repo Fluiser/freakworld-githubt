@@ -43,6 +43,7 @@ namespace Engine{
             { return glfwWindowShouldClose(_window); }
 
             void display();
+            void draw();
         };
     }
 }

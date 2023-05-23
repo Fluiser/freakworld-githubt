@@ -104,8 +104,9 @@ typedef vec2<int32_t> vec2i;
 } // namespace Math
 
 #include <iostream>
-
 template <typename T> void ZeroMem(T &v) { memset((void *)&v, 0, sizeof(v)); }
+
+#ifdef DEBUG
 #ifdef WIN32
 #define CHECK_VULKAN_CALLBACK(CB)                                              \
   {                                                                            \
@@ -159,4 +160,11 @@ template <typename T> void ZeroMem(T &v) { memset((void *)&v, 0, sizeof(v)); }
             CRITICAL_ERROR(str.c_str())                                        \
         }                                                                      \
     }
+#endif
+
+#else
+
+#define CRITICAL_VULKAN_CALLBACK(CB) CB; 
+#define CHECK_VULKAN_CALLBACK(CB) CB;
+
 #endif

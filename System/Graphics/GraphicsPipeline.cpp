@@ -98,9 +98,9 @@ namespace Engine {
                 raster.rasterizerDiscardEnable = VK_FALSE;
                 raster.depthClampEnable = VK_FALSE;
                 raster.polygonMode = VK_POLYGON_MODE_FILL;
-                // raster.lineWidth = 1.0f;
-                //raster.cullMode = VK_CULL_MODE_BACK_BIT;
-                //raster.frontFace = VK_FRONT_FACE_CLOCKWISE;
+                raster.lineWidth = 1.0f;
+                raster.cullMode = VK_CULL_MODE_BACK_BIT;
+                raster.frontFace = VK_FRONT_FACE_CLOCKWISE;
                 raster.depthBiasEnable = VK_FALSE;
 
                 VkPipelineMultisampleStateCreateInfo multisampling;
@@ -151,7 +151,7 @@ namespace Engine {
                 ZeroMem(colorAttachment);
                 colorAttachment.format = format;
                 colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-                colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD; // VK_ATTACHMENT_LOAD_OP_CLEAR, если во время каждого прохода нужно очищать фреймбуфер
+                colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR; 
                 colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 
                 colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -171,12 +171,14 @@ namespace Engine {
                 subpass.colorAttachmentCount = 1;
                 subpass.pColorAttachments = &colorAttachmentRef;
 
-                VkSubpassDependency depency;
-                ZeroMem(depency);
-                depency.srcSubpass = VK_SUBPASS_EXTERNAL;
-                depency.dstSubpass = 0;
-                depency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-                depency.srcAccessMask = 0;
+                VkSubpassDependency dependency;
+                ZeroMem(dependency);
+                dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+                dependency.dstSubpass = 0;
+                dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+                dependency.srcAccessMask = 0;
 
                 VkRenderPassCreateInfo renderPassInfo;
                 ZeroMem(renderPassInfo);
@@ -186,7 +188,7 @@ namespace Engine {
                 renderPassInfo.subpassCount = 1;
                 renderPassInfo.pSubpasses = &subpass;
                 renderPassInfo.dependencyCount = 1;
-                renderPassInfo.pDependencies = &depency;
+                renderPassInfo.pDependencies = &dependency;
 
                 CRITICAL_VULKAN_CALLBACK(vkCreateRenderPass(_device, &renderPassInfo, nullptr, &_renderPass));
 
@@ -291,6 +293,7 @@ namespace Engine {
                 for(int i = 0; i < _swapchain_framebuffers.size(); ++i)
                 {
                     VkCommandBufferBeginInfo begin;
+                    ZeroMem(begin);
                     begin.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
                     begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
                     begin.pInheritanceInfo = nullptr;

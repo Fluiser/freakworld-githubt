@@ -15,8 +15,8 @@ int main()
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 		glfwPollEvents();
 		std::this_thread::sleep_for(std::chrono::milliseconds(30));
+		window.draw();
 		window.display();
-		return 0;
 	}
 
 	return 0;

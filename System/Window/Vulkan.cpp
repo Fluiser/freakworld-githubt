@@ -196,6 +196,7 @@ namespace Engine
                 { // Select optimal mode.
                     std::vector<VkPresentModeKHR> modes;
                     modes.resize(size);
+                    //VK_PRESENT_MODE_IMMEDIATE_KHR - NO vsync
                     vkGetPhysicalDeviceSurfacePresentModesKHR(_PhysicalDevice, _surface, &size, modes.data());
                     for (const auto &m : modes)
                     {
@@ -222,7 +223,9 @@ namespace Engine
                         formats.resize(formatCount);
                         vkGetPhysicalDeviceSurfaceFormatsKHR(_PhysicalDevice, _surface, &formatCount, formats.data());
                         
-                        VkSurfaceFormatKHR selectedFormat = formats[0];
+                        _format = formats[0].format;
+                        if(false) // what the fucking VK_FORMAT with VK_IMAGE_TILIN_OPTIMAL?
+                        // and yes. Better take format what give driver.
                         for(auto& form: formats)
                         {
                             if(form.format == VK_FORMAT_R8G8B8A8_SRGB && form.colorSpace == VK_COLORSPACE_SRGB_NONLINEAR_KHR)
@@ -393,6 +396,14 @@ namespace Engine
                 presentInfo.pResults = nullptr;
 
                 CRITICAL_VULKAN_CALLBACK(vkQueuePresentKHR(_presentq, &presentInfo));
+            }
+
+            void VulkanDriver::draw()
+            {
+                auto& p = _pipelines.front();
+                p.beginCommands();
+                p.draw(3, 1, 0, 0);
+                p.endCommands();
             }
         }
     }
