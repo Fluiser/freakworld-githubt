@@ -47,8 +47,6 @@ int main(int argc, char** argv)
 		colors[i - 1] = sf::Color(f | 0x000000ff);
 	}
 
-	init_handlers();
-
 	Engine::Window window(sf::VideoMode(1280, 720), "frog");
 	sf::Event event;
 
