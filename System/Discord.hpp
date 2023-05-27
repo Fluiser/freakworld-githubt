@@ -88,9 +88,9 @@ namespace Discord {
         activity.SetState(_state.c_str());
         activity.SetType(discord::ActivityType::Playing);
 
-        activity.GetAssets().SetSmallImage("status");
+        activity.GetAssets().SetSmallImage("statusnow");
         activity.GetAssets().SetSmallText("Помоги");
-        activity.GetAssets().SetLargeImage("ava");
+        activity.GetAssets().SetLargeImage("avatar");
         // activity.GetAssets().SetLargeText("yeah");
 
         activity.GetTimestamps().SetStart(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count()*1000);
