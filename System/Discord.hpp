@@ -47,7 +47,9 @@ namespace Discord {
 #endif
         _presence.state = _state.c_str();
         _presence.button1_label = "Discord";
-        _presence.button1_url = "https://discord.gg/v4uJu4PvjK";
+        _presence.button1_url = "https://discord.gg/zFDNYNyCBa";
+        _presence.button2_label = "Github";
+        _presence.button2_url = "https://github.com/Fluiser/freakworld-githubt";
 
         Discord_Initialize("1094264443577303090", &_handles, 1, nullptr);
         Discord_UpdatePresence(&_presence);
