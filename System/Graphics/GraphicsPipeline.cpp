@@ -16,6 +16,8 @@ namespace Engine {
                 {
                     s.destroy(_device);
                 }
+                vkFreeMemory(_device, _devMem, nullptr);
+                vkDestroyBuffer(_device, _vertexBuffer, nullptr);
                 for(auto& framebuffer: _swapchain_framebuffers)
                 {
                     vkDestroyFramebuffer(_device, framebuffer, nullptr);
@@ -60,11 +62,21 @@ namespace Engine {
                 frag.module = fragShader._shaderModule;
                 frag.pName = ProgramEntryName;
 
-                VkPipelineShaderStageCreateInfo shaderStages[] = {vrx, frag}; 
+                VkPipelineShaderStageCreateInfo shaderStages[] = {vrx, frag};
 //////////////////////////////////pipeline////////////////////////////////////////////
                 VkPipelineVertexInputStateCreateInfo vertexIInfo;
                 ZeroMem(vertexIInfo);
                 vertexIInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+
+                ////////////////shaders///////////////////
+                auto bindDesc = Vertex::getDescription();
+                auto attrdDesc = Vertex::getAttribyteDescription();
+
+                vertexIInfo.vertexBindingDescriptionCount = 1;
+                vertexIInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attrdDesc.size());
+                vertexIInfo.pVertexBindingDescriptions = &bindDesc;
+                vertexIInfo.pVertexAttributeDescriptions = attrdDesc.data();
+                //////////////////////////////////////////
 
                 VkPipelineInputAssemblyStateCreateInfo assemblyIInfo;
                 ZeroMem(assemblyIInfo);
@@ -236,6 +248,11 @@ namespace Engine {
                 CRITICAL_VULKAN_CALLBACK(vkCreateSemaphore(device, &SemaphoreInfo, nullptr, &_renderFinished));
             }
 
+            void Pipeline::initMemType(VkPhysicalDevice dev)
+            {
+                vkGetPhysicalDeviceMemoryProperties(dev, &_memProps);
+            }
+
             void Pipeline::initFramebuffers(std::vector<VkImageView>& swapchainImageView, VkExtent2D extent)
             {
                 _swapchain_framebuffers.resize(swapchainImageView.size());
@@ -277,13 +294,70 @@ namespace Engine {
                     vkCmdEndRenderPass(cmd);
                     CHECK_VULKAN_CALLBACK(vkEndCommandBuffer(cmd));
                 }
+
+                vkDestroyBuffer(_device, _vertexBuffer, nullptr); // Если вызвано во время рендера - то игра в рулетку.
+
+                VkBufferCreateInfo bufferInfo;
+                ZeroMem(bufferInfo);
+                bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+                bufferInfo.size = (sizeof(_vertex[0]) * _vertex.size());
+                bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+                bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE; // Только для одного семейства рендера. //@option
+
+                CRITICAL_VULKAN_CALLBACK(vkCreateBuffer(_device, &bufferInfo, nullptr, &_vertexBuffer));
+
+                if(_lastSizeMem < (sizeof(_vertex[0]) * _vertex.size()))
+                {
+                    _lastSizeMem = bufferInfo.size;
+
+                    if(_lastSizeMem > 0)
+                    {
+                        vkFreeMemory(_device, _devMem, nullptr);
+                    }
+
+                    VkMemoryRequirements memreq;
+                    ZeroMem(memreq);
+                    vkGetBufferMemoryRequirements(_device, _vertexBuffer, &memreq);
+
+                    VkMemoryAllocateInfo allocInfo;
+                    ZeroMem(allocInfo);
+                    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+                    allocInfo.allocationSize = memreq.size;
+                    allocInfo.memoryTypeIndex = findMemType(memreq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, _memProps);
+
+                    CRITICAL_VULKAN_CALLBACK(vkAllocateMemory(_device, &allocInfo, nullptr, &_devMem));
+                }
+
+                CRITICAL_VULKAN_CALLBACK(vkBindBufferMemory(_device, _vertexBuffer, _devMem, 0));
+                void* data;
+                vkMapMemory(_device, _devMem, 0, bufferInfo.size, 0, &data);
+                memcpy(data, _vertex.data(), (size_t)bufferInfo.size);
+                vkUnmapMemory(_device, _devMem);
             }
 
-            void Pipeline::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance)
+            void Pipeline::clearVertex()
+            {
+                _vertex.clear();
+            }
+
+            size_t Pipeline::size()
+            {
+                return _vertex.size();
+            }
+
+            void Pipeline::addVertex(Vertex x)
+            {
+                _vertex.emplace_back(x);
+            }
+
+            void Pipeline::draw()
             {
                 for(int i = 0; i < _swapchain_framebuffers.size(); ++i)
                 {
-                    vkCmdDraw(_commandBuffers[i], vertexCount, instanceCount, firstVertex, firstInstance);
+                    vkCmdBindPipeline(_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, _graphicsPipeline);
+                    VkDeviceSize offsets[] = {0};
+                    vkCmdBindVertexBuffers(_commandBuffers[i], 0, 1, &_vertexBuffer, offsets);
+                    vkCmdDraw(_commandBuffers[i], static_cast<uint32_t>(_vertex.size()), 1, 0, 0);
                 }
             }  
 
@@ -313,6 +387,45 @@ namespace Engine {
                     vkCmdBeginRenderPass(_commandBuffers[i], &rpass, VK_SUBPASS_CONTENTS_INLINE);
                     vkCmdBindPipeline(_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, _graphicsPipeline);
                 }
+            }
+
+            VkVertexInputBindingDescription Pipeline::Vertex::getDescription() 
+            {
+                return VkVertexInputBindingDescription {
+                    .binding = 0,
+                    .stride = sizeof(Pipeline::Vertex),
+                    .inputRate = VK_VERTEX_INPUT_RATE_VERTEX
+                };
+            }
+            std::array<VkVertexInputAttributeDescription, 2> Pipeline::Vertex::getAttribyteDescription()
+            {
+                static std::array<VkVertexInputAttributeDescription, 2> array{};
+
+                array[0].binding = 0;
+                array[0].location = 0;
+                array[0].format = VK_FORMAT_R32G32_SFLOAT;
+                array[0].offset = offsetof(Vertex, pos);
+
+                array[1].binding = 0;
+                array[1].location = 1;
+                array[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+                array[1].offset = offsetof(Vertex, color);
+
+                return array;
+            }
+
+            uint32_t Pipeline::findMemType(uint32_t filter, VkMemoryPropertyFlags flag, VkPhysicalDeviceMemoryProperties& prop)
+            {
+                for(uint32_t i = 0; i < prop.memoryTypeCount; ++i)
+                {
+                    if(
+                        (filter & (1 << i)) &&
+                        (prop.memoryTypes[i].propertyFlags & flag)
+                    )
+                        return i;
+                }
+                return 0;
+                DEB_LOG("uint32_t Pipeline::findMemType(uint32_t filter, VkMemoryPropertyFlags flag, VkPhysicalDeviceMemoryProperties& prop): Can't find memory type\n");
             }
         }
     }

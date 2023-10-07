@@ -5,6 +5,7 @@
 #include <optional>
 #include <set>
 #include <algorithm>
+#include <chrono>
 
 #ifdef DEBUG
 #include <map>
@@ -55,7 +56,7 @@ namespace Engine
                 _appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
                 _appInfo.pApplicationName = "FreakWorld";
                 _appInfo.pEngineName = "FreakEngine";
-                _appInfo.apiVersion = VK_API_VERSION_1_2;
+                _appInfo.apiVersion = VK_API_VERSION_1_3;
 
                 VkInstanceCreateInfo crInfo;
                 ZeroMem(crInfo);
@@ -224,8 +225,6 @@ namespace Engine
                         vkGetPhysicalDeviceSurfaceFormatsKHR(_PhysicalDevice, _surface, &formatCount, formats.data());
                         
                         _format = formats[0].format;
-                        if(false) // what the fucking VK_FORMAT with VK_IMAGE_TILIN_OPTIMAL?
-                        // and yes. Better take format what give driver.
                         for(auto& form: formats)
                         {
                             if(form.format == VK_FORMAT_R8G8B8A8_SRGB && form.colorSpace == VK_COLORSPACE_SRGB_NONLINEAR_KHR)
@@ -240,6 +239,17 @@ namespace Engine
                                 break;
                             }
                         }
+                        DEB_LOG("Available formats: \n");
+                        for(const auto& f: formats)
+                        {
+                            DEB_LOG("\t" << TranslateFormats[_format] << ": " << f.colorSpace << "\n");
+                            // vkGetPhysicalDeviceImageFormatProperties(_PhysicalDevice,
+                            //                                         f.format,
+                            //                                         VK_IMAGE_TYPE_2D,
+                            //                                         VK_IMAGE_TILING_OPTIMAL,
+                            //                                         VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                            //                                         0, nullptr);
+                        }
                         DEB_LOG("Used format: " << TranslateFormats[_format] << "\n");
                     }
                     else 
@@ -248,25 +258,24 @@ namespace Engine
                     }
                 }
                 
-                {
-                    if(capabilities.currentExtent.width != UINT32_MAX) {
-                        _extent = capabilities.currentExtent;
-                    } else {
-                        int w, h;
-                        glfwGetFramebufferSize(window, &w, &h);
-                        _extent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, (uint32_t)w));
-                        _extent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, (uint32_t)h));
-                    }
-
+                if(capabilities.currentExtent.width != UINT32_MAX) {
+                    _extent = capabilities.currentExtent;
+                } else {
+                    int w, h;
+                    glfwGetFramebufferSize(window, &w, &h);
+                    _extent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, (uint32_t)w));
+                    _extent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, (uint32_t)h));
                 }
+
 
                 crsc.imageFormat = _format;
                 crsc.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                 crsc.imageExtent = _extent;
                 crsc.imageArrayLayers = 1; ////////////////////////////// <.
                 crsc.presentMode = presentMode;//                          |
-                crsc.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT; // Пока у нас однослойный рендер.
-                // Но это не значит, что он будет таким всегда. //@imageUsage
+                crsc.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT; // Пока у нас однослойный рендер.
+                // Но это не значит, что он будет таким всегда. //@imageUsage //@option
+                // press F intel gpu
 
 
 
@@ -296,6 +305,7 @@ namespace Engine
                 crsc.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;//VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR;
                 crsc.clipped = VK_TRUE;
                 crsc.oldSwapchain = VK_NULL_HANDLE;
+                
 
                 CRITICAL_VULKAN_CALLBACK(vkCreateSwapchainKHR(_device, &crsc, nullptr, &_swapchain))
                 ////////////////////////////////-- Init images in vector --/////////////////////////////////////////////
@@ -310,7 +320,7 @@ namespace Engine
                     ZeroMem(crinfo);
                     crinfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
                     crinfo.image = _swapchain_images[i];
-                    crinfo.viewType = VK_IMAGE_VIEW_TYPE_2D; // @viewtype
+                    crinfo.viewType = VK_IMAGE_VIEW_TYPE_2D; //@viewtype //@option
                     crinfo.format = _format;
                     
                     crinfo.components.a = VK_COMPONENT_SWIZZLE_A;
@@ -331,7 +341,7 @@ namespace Engine
                 
                 auto& basePipeline = _pipelines.back();
                 basePipeline.initPipeline(_device, _extent, _format);
-                
+                basePipeline.initMemType(_PhysicalDevice);
                 basePipeline.initFramebuffers(_swapchain_images_views, _extent);
 
                 VkCommandPoolCreateInfo renderInfo;
@@ -368,7 +378,7 @@ namespace Engine
                 ZeroMem(info);
 
                 info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-                static VkPipelineStageFlags flags[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+                static VkPipelineStageFlags flags[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT}; // относительно каждого семафора
                 info.waitSemaphoreCount = 1;
                 info.pWaitSemaphores = &pip._imageAvailable;
                 info.pWaitDstStageMask = flags;
@@ -400,9 +410,25 @@ namespace Engine
 
             void VulkanDriver::draw()
             {
+                static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+                static float angle = 0;
+                static constexpr float stepangle = (M_PI*2.0f/3.0f);
                 auto& p = _pipelines.front();
-                p.beginCommands();
-                p.draw(3, 1, 0, 0);
+
+                if(p.size() < 1 || std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() >= 10)
+                {
+                    p.clearVertex();
+                    p.addVertex({{cos(angle), sin(angle)},
+                        {abs(cos(angle )), abs(sin(angle )), abs(tanh(angle))}});
+                    p.addVertex({{cos(angle + stepangle), sin(angle + stepangle)},
+                        {abs(cos(angle + stepangle)), abs(sin(angle + stepangle )), abs(tanh(angle + stepangle))}});
+                    p.addVertex({{cos(angle + stepangle*2), sin(angle + stepangle*2)},
+                        {abs(cos(angle + stepangle * 2)), abs(sin(angle + stepangle * 2)), abs(tanh(angle + stepangle * 2))}});
+                    angle += M_PI/100;
+                }
+
+                p.beginCommands();   
+                p.draw();
                 p.endCommands();
             }
         }
