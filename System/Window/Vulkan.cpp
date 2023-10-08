@@ -208,7 +208,8 @@ namespace Engine
                         }
                     }
                 }
-                presentMode = VK_PRESENT_MODE_IMMEDIATE_KHR;
+                //disable vsync
+                //presentMode = VK_PRESENT_MODE_IMMEDIATE_KHR;
 
                 VkSwapchainCreateInfoKHR crsc; // create swapchain
                 ZeroMem(crsc);
