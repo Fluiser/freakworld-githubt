@@ -406,27 +406,26 @@ namespace Engine
                 presentInfo.pResults = nullptr;
 
                 CRITICAL_VULKAN_CALLBACK(vkQueuePresentKHR(_presentq, &presentInfo));
+                CHECK_VULKAN_CALLBACK(vkQueueWaitIdle(_presentq));
+                // CHECK_VULKAN_CALLBACK(vkDeviceWaitIdle(_device));
             }
 
-            void VulkanDriver::draw()
+            void VulkanDriver::addVertex(Engine::System::Graphics::Pipeline::Vertex vertex, Engine::System::Graphics::Pipeline* pipeline)
             {
-                static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-                static float angle = 0;
-                static constexpr float stepangle = (M_PI*2.0f/3.0f);
-                auto& p = _pipelines.front();
+                auto& p = (pipeline ? *pipeline : _pipelines.front());
+                p.addVertex(vertex);
+            }
 
-                if(p.size() < 1 || std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() >= 10)
-                {
-                    p.clearVertex();
-                    p.addVertex({{cos(angle), sin(angle)},
-                        {abs(cos(angle )), abs(sin(angle )), abs(tanh(angle))}});
-                    p.addVertex({{cos(angle + stepangle), sin(angle + stepangle)},
-                        {abs(cos(angle + stepangle)), abs(sin(angle + stepangle )), abs(tanh(angle + stepangle))}});
-                    p.addVertex({{cos(angle + stepangle*2), sin(angle + stepangle*2)},
-                        {abs(cos(angle + stepangle * 2)), abs(sin(angle + stepangle * 2)), abs(tanh(angle + stepangle * 2))}});
-                    angle += M_PI/100;
-                }
+            void VulkanDriver::clearVertex(Engine::System::Graphics::Pipeline* pipeline)
+            {
+                auto& p = (pipeline ? *pipeline : _pipelines.front());
+                p.clearVertex();
+            }
 
+            void VulkanDriver::draw(Engine::System::Graphics::Pipeline* pipeline)
+            {
+                auto& p = (pipeline ? *pipeline : _pipelines.front());
+                std::cout << "VERTEX: " << p._vertex.size() << "\n";
                 p.beginCommands();   
                 p.draw();
                 p.endCommands();

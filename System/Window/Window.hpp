@@ -42,8 +42,13 @@ namespace Engine{
             inline bool ShouldClose()
             { return glfwWindowShouldClose(_window); }
 
+            void draw(Engine::System::Graphics::Pipeline::Vertex vertex);
+            void draw(decltype(Engine::System::Graphics::Pipeline::Vertex::pos) pos);
+
+
             void display();
-            void draw();
+            void clear();
+            // void draw();
         };
     }
 }

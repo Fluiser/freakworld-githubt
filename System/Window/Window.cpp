@@ -46,13 +46,29 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
             return Engine::IODevices::Event{};
         }
 
-        void Window::draw()
+        void Window::draw(Engine::System::Graphics::Pipeline::Vertex vertex)
         {
-            _VkDriver.draw();
+            _VkDriver.addVertex(vertex);
+        }
+
+        void Window::draw(decltype(Engine::System::Graphics::Pipeline::Vertex::pos) pos)
+        {
+            _VkDriver.addVertex(
+                {
+                    .pos = pos,
+                    .color = {1.0f, 1.0f, 1.0f}
+                }
+            );
+        }
+
+        void Window::clear()
+        {
+            _VkDriver.clearVertex();
         }
 
         void Window::display()
         {
+            _VkDriver.draw();
             _VkDriver.qSumbit();
             _VkDriver.display();
         }

@@ -66,7 +66,10 @@ namespace Engine {
                 void qSumbit(Engine::System::Graphics::Pipeline* = nullptr);
                 void display(Engine::System::Graphics::Pipeline* = nullptr);
 
-                void draw();
+                void addVertex(Engine::System::Graphics::Pipeline::Vertex vertex, Engine::System::Graphics::Pipeline* pipeline = nullptr);
+                void clearVertex(Engine::System::Graphics::Pipeline* pipeline = nullptr);
+
+                void draw(Engine::System::Graphics::Pipeline* = nullptr);
             };
 
         }

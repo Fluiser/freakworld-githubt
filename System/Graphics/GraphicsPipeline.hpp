@@ -15,6 +15,18 @@ namespace Engine {
         namespace Graphics {
 
             class Pipeline {
+            public:
+                class Vertex {
+                public:
+                    glm::vec2 pos;
+                    glm::vec3 color;
+                private:
+                    static VkVertexInputBindingDescription getDescription();
+                    static std::array<VkVertexInputAttributeDescription, 2> getAttribyteDescription();
+                    friend class Pipeline;
+                    friend class Engine::Window::Wrapper::VulkanDriver;
+                };
+            private:
                 VkDevice _device;
 
                 // static inline int countPipelines = 0;
@@ -32,15 +44,6 @@ namespace Engine {
                 VkSemaphore _renderFinished;
 
                 friend Engine::Window::Wrapper::VulkanDriver;
-
-                class Vertex {
-                public:
-                    glm::vec2 pos;
-                    glm::vec3 color;
-
-                    static VkVertexInputBindingDescription getDescription();
-                    static std::array<VkVertexInputAttributeDescription, 2> getAttribyteDescription();
-                };
 
                 size_t _lastSizeMem = 0;
                 VkDeviceMemory _devMem;
