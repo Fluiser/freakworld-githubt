@@ -48,12 +48,12 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
 
         void Window::drawPXS(Engine::System::Graphics::Pipeline::Vertex vertex)
         {
-            vertex.pos.x = (vertex.pos.x - (_windowSize.x * 0.5))
+            vertex.pos.x = (vertex.pos.x - (_windowSize.x * 0.5f))
                                         /
-                                (_windowSize.x*0.5);
-            vertex.pos.y = (vertex.pos.y - (_windowSize.y * 0.5))
+                                (_windowSize.x*0.5f);
+            vertex.pos.y = (vertex.pos.y - (_windowSize.y * 0.5f))
                                         /
-                                (_windowSize.y*0.5);
+                                (_windowSize.y*0.5f);
             std::cout << "px vec: " << vertex.pos.x << " x " << vertex.pos.y << "\n";
             _VkDriver.addVertex(vertex);
         }
