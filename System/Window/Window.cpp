@@ -46,6 +46,18 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
             return Engine::IODevices::Event{};
         }
 
+        void Window::drawPXS(Engine::System::Graphics::Pipeline::Vertex vertex)
+        {
+            vertex.pos.x = (vertex.pos.x - (_windowSize.x * 0.5))
+                                        /
+                                (_windowSize.x*0.5);
+            vertex.pos.y = (vertex.pos.y - (_windowSize.y * 0.5))
+                                        /
+                                (_windowSize.y*0.5);
+            std::cout << "px vec: " << vertex.pos.x << " x " << vertex.pos.y << "\n";
+            _VkDriver.addVertex(vertex);
+        }
+
         void Window::draw(Engine::System::Graphics::Pipeline::Vertex vertex)
         {
             _VkDriver.addVertex(vertex);
