@@ -328,11 +328,14 @@ namespace Engine {
                     CRITICAL_VULKAN_CALLBACK(vkAllocateMemory(_device, &allocInfo, nullptr, &_devMem));
                 }
 
-                CRITICAL_VULKAN_CALLBACK(vkBindBufferMemory(_device, _vertexBuffer, _devMem, 0));
-                void* data;
-                vkMapMemory(_device, _devMem, 0, bufferInfo.size, 0, &data);
-                memcpy(data, _vertex.data(), (size_t)bufferInfo.size);
-                vkUnmapMemory(_device, _devMem);
+                if(bufferInfo.size > 0) 
+                {
+                    CRITICAL_VULKAN_CALLBACK(vkBindBufferMemory(_device, _vertexBuffer, _devMem, 0));
+                    void* data = nullptr;
+                    vkMapMemory(_device, _devMem, 0, bufferInfo.size, 0, &data);
+                    memcpy(data, _vertex.data(), (size_t)bufferInfo.size);
+                    vkUnmapMemory(_device, _devMem);
+                }
             }
 
             void Pipeline::clearVertex()
