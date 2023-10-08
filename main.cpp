@@ -55,20 +55,15 @@ int main()
 				return v;
 			};
 
-			for(int i = 0; i < 1; ++i)
-			{
-				window.draw({{cos((i * stepangle/(100)) + angle), 					sin((i * stepangle/(100)) + angle)}, ccol(colorangle)});
-				window.draw({{cos((i * stepangle/(100)) + angle+stepangle), 		sin((i * stepangle/(100)) + angle+stepangle)}, ccol(colorangle + stepangle)});
-				window.draw({{cos((i * stepangle/(100)) + angle+stepangle*2), 		sin((i * stepangle/(100)) + angle+stepangle*2)}, ccol(colorangle + stepangle * 2)});
-				window.drawPXS({{
-					100, 100
-				}, {1.0, 0.0, 0.0}});
-				window.drawPXS({{
-					300, 300
-				}, {0.0, 1.0, 0.0}});
-				window.drawPXS({{
-					-50, 300
-				}, {0.0, 0.0, 1.0}});
+			for(int i = 0; i < 2000; ++i)
+			{ 
+				window.draw({{cos((i * stepangle/(100)) + angle), 							sin((i * stepangle/(100)) + angle)}, {1, 0, 0}});
+				window.draw({{cos((i * stepangle/(100)) + angle+stepangle*2), 				sin((i * stepangle/(100)) + angle+stepangle)}, {0, 1, 0}});
+				window.draw({{cos((i * stepangle/(100)) + angle+stepangle), 				sin((i * stepangle/(100)) + angle+stepangle*2)}, {0, 0, 1}});
+				
+				
+				
+
 			}
 
 			// window

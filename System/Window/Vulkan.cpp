@@ -424,6 +424,11 @@ namespace Engine
                 p.clearVertex();
             }
 
+            decltype(Engine::System::Graphics::Pipeline::_vertex)& VulkanDriver::getVertex(Engine::System::Graphics::Pipeline* p)
+            {
+                return (p ? *p : _pipelines.front())._vertex;
+            }
+
             void VulkanDriver::draw(Engine::System::Graphics::Pipeline* pipeline)
             {
                 auto& p = (pipeline ? *pipeline : _pipelines.front());

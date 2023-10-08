@@ -46,7 +46,6 @@ namespace Engine{
             void draw(Engine::System::Graphics::Pipeline::Vertex vertex);
             void draw(decltype(Engine::System::Graphics::Pipeline::Vertex::pos) pos);
 
-
             void display();
             void clear();
             // void draw();

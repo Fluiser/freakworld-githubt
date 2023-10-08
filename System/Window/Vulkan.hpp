@@ -68,6 +68,7 @@ namespace Engine {
 
                 void addVertex(Engine::System::Graphics::Pipeline::Vertex vertex, Engine::System::Graphics::Pipeline* pipeline = nullptr);
                 void clearVertex(Engine::System::Graphics::Pipeline* pipeline = nullptr);
+                decltype(Engine::System::Graphics::Pipeline::_vertex)& getVertex(Engine::System::Graphics::Pipeline* = nullptr);
 
                 void draw(Engine::System::Graphics::Pipeline* = nullptr);
             };
