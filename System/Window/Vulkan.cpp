@@ -208,6 +208,7 @@ namespace Engine
                         }
                     }
                 }
+                presentMode = VK_PRESENT_MODE_IMMEDIATE_KHR;
 
                 VkSwapchainCreateInfoKHR crsc; // create swapchain
                 ZeroMem(crsc);
@@ -425,7 +426,6 @@ namespace Engine
             void VulkanDriver::draw(Engine::System::Graphics::Pipeline* pipeline)
             {
                 auto& p = (pipeline ? *pipeline : _pipelines.front());
-                std::cout << "VERTEX: " << p._vertex.size() << "\n";
                 p.beginCommands();   
                 p.draw();
                 p.endCommands();
