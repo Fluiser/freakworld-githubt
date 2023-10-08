@@ -8,7 +8,7 @@ int main()
 {
 	Engine::Window::Window window;
 
-	window.init({720, 720}, "hell");
+	window.init({1000, 1000}, "hell");
 
 	while(!window.ShouldClose())
 	{
@@ -55,15 +55,12 @@ int main()
 				return v;
 			};
 
-			for(int i = 0; i < 2000; ++i)
+			for(int i = 0; i < 3000; ++i)
 			{ 
 				window.draw({{cos((i * stepangle/(100)) + angle), 							sin((i * stepangle/(100)) + angle)}, {1, 0, 0}});
-				window.draw({{cos((i * stepangle/(100)) + angle+stepangle*2), 				sin((i * stepangle/(100)) + angle+stepangle)}, {0, 1, 0}});
-				window.draw({{cos((i * stepangle/(100)) + angle+stepangle), 				sin((i * stepangle/(100)) + angle+stepangle*2)}, {0, 0, 1}});
+				window.draw({{cos((i * stepangle/(100)) + angle+stepangle*2), 				sin((i * stepangle/(100)) + angle+sqrt(stepangle))}, {0, 1, 0}});
+				window.draw({{cos((i * stepangle/(100)) + sqrt(angle)+stepangle), 				sin((i * stepangle/(100)) + angle+stepangle*2)}, {0, 0, 1}});
 				
-				
-				
-
 			}
 
 			// window

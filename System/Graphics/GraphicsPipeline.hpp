@@ -57,7 +57,7 @@ namespace Engine {
                 Pipeline() = default;
                 ~Pipeline();
 
-                void initPipeline(VkDevice, VkExtent2D, VkFormat, unsigned multisampling = 0);
+                void initPipeline(VkDevice, VkExtent2D, VkFormat, unsigned multisampling = 0, uint32_t maxBytesRequiresVRAM = 1024*1024*128);
                 void initFramebuffers(std::vector<VkImageView>&, VkExtent2D);
                 void initCommandBuffers(VkCommandPool cmdPool);
 

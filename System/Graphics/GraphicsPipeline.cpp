@@ -32,7 +32,8 @@ namespace Engine {
                 VkDevice device,
                 VkExtent2D extent,
                 VkFormat format,
-                unsigned multisamplingOption)
+                unsigned multisamplingOption,
+                uint32_t maxVRAM)
             {
                 _extent = extent;
                 _device = device;
@@ -246,6 +247,15 @@ namespace Engine {
 
                 CRITICAL_VULKAN_CALLBACK(vkCreateSemaphore(device, &SemaphoreInfo, nullptr, &_imageAvailable));
                 CRITICAL_VULKAN_CALLBACK(vkCreateSemaphore(device, &SemaphoreInfo, nullptr, &_renderFinished));
+
+                VkBufferCreateInfo bufferInfo;
+                ZeroMem(bufferInfo);
+                bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+                bufferInfo.size =  maxVRAM;
+                bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+                bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE; // Только для одного семейства рендера. //@option
+
+                CRITICAL_VULKAN_CALLBACK(vkCreateBuffer(_device, &bufferInfo, nullptr, &_vertexBuffer));
             }
 
             void Pipeline::initMemType(VkPhysicalDevice dev)
@@ -295,47 +305,7 @@ namespace Engine {
                     CHECK_VULKAN_CALLBACK(vkEndCommandBuffer(cmd));
                 }
 
-                vkDestroyBuffer(_device, _vertexBuffer, nullptr); // Если вызвано во время рендера - то игра в рулетку.
-
-                VkBufferCreateInfo bufferInfo;
-                ZeroMem(bufferInfo);
-                bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-                bufferInfo.size = (sizeof(_vertex[0]) * _vertex.size());
-                bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-                bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE; // Только для одного семейства рендера. //@option
-
-                CRITICAL_VULKAN_CALLBACK(vkCreateBuffer(_device, &bufferInfo, nullptr, &_vertexBuffer));
-
-                if(_lastSizeMem < (sizeof(_vertex[0]) * _vertex.size()))
-                {
-                    _lastSizeMem = bufferInfo.size;
-
-                    if(_lastSizeMem > 0)
-                    {
-                        vkFreeMemory(_device, _devMem, nullptr);
-                    }
-
-                    VkMemoryRequirements memreq;
-                    ZeroMem(memreq);
-                    vkGetBufferMemoryRequirements(_device, _vertexBuffer, &memreq);
-
-                    VkMemoryAllocateInfo allocInfo;
-                    ZeroMem(allocInfo);
-                    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                    allocInfo.allocationSize = _lastSizeMem = memreq.size;
-                    allocInfo.memoryTypeIndex = findMemType(memreq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, _memProps);
-
-                    CRITICAL_VULKAN_CALLBACK(vkAllocateMemory(_device, &allocInfo, nullptr, &_devMem));
-                }
-
-                if(bufferInfo.size > 0) 
-                {
-                    CRITICAL_VULKAN_CALLBACK(vkBindBufferMemory(_device, _vertexBuffer, _devMem, 0));
-                    void* data = nullptr;
-                    vkMapMemory(_device, _devMem, 0, bufferInfo.size, 0, &data);
-                    memcpy(data, _vertex.data(), (size_t)bufferInfo.size);
-                    vkUnmapMemory(_device, _devMem);
-                }
+                // vkDestroyBuffer(_device, _vertexBuffer, nullptr); // Если вызвано во время рендера - то игра в рулетку.
             }
 
             void Pipeline::clearVertex()
@@ -391,6 +361,36 @@ namespace Engine {
                     vkCmdBeginRenderPass(_commandBuffers[i], &rpass, VK_SUBPASS_CONTENTS_INLINE);
                     vkCmdBindPipeline(_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, _graphicsPipeline);
                 }
+
+                VkMemoryRequirements memreq;
+                ZeroMem(memreq);
+                vkGetBufferMemoryRequirements(_device, _vertexBuffer, &memreq);
+
+                if (_lastSizeMem < (sizeof(_vertex[0]) * _vertex.size()))
+                {
+                    if (_lastSizeMem > 0)
+                    {
+                        vkFreeMemory(_device, _devMem, nullptr);
+                    }
+
+                    VkMemoryAllocateInfo allocInfo;
+                    ZeroMem(allocInfo);
+                    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+                    allocInfo.allocationSize = _lastSizeMem = memreq.size;
+                    allocInfo.memoryTypeIndex = findMemType(memreq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, _memProps);
+
+                    CRITICAL_VULKAN_CALLBACK(vkAllocateMemory(_device, &allocInfo, nullptr, &_devMem));
+                    CRITICAL_VULKAN_CALLBACK(vkBindBufferMemory(_device, _vertexBuffer, _devMem, 0));
+                }
+
+                if (_vertex.size() > 0)
+                {
+                    void* data = nullptr;
+                    vkMapMemory(_device, _devMem, 0, (sizeof(_vertex[0]) * _vertex.size()), 0, &data);
+                    memcpy(data, _vertex.data(), (sizeof(_vertex[0]) * _vertex.size()));
+                    vkUnmapMemory(_device, _devMem);
+                }
+
             }
 
             VkVertexInputBindingDescription Pipeline::Vertex::getDescription() 
