@@ -246,17 +246,6 @@ namespace Engine {
 
                 CRITICAL_VULKAN_CALLBACK(vkCreateSemaphore(device, &SemaphoreInfo, nullptr, &_imageAvailable));
                 CRITICAL_VULKAN_CALLBACK(vkCreateSemaphore(device, &SemaphoreInfo, nullptr, &_renderFinished));
-                
-                for(int i = 0; i < _swapchain_framebuffers.size(); ++i)
-                {
-                    VkCommandBufferBeginInfo begin;
-                    ZeroMem(begin);
-                    begin.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-                    begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-                    begin.pInheritanceInfo = nullptr;
-
-                    CHECK_VULKAN_CALLBACK(vkBeginCommandBuffer(_commandBuffers[i], &begin));
-                }
             }
 
             void Pipeline::initMemType(VkPhysicalDevice dev)
@@ -333,7 +322,7 @@ namespace Engine {
                     VkMemoryAllocateInfo allocInfo;
                     ZeroMem(allocInfo);
                     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                    allocInfo.allocationSize = memreq.size;
+                    allocInfo.allocationSize = _lastSizeMem = memreq.size;
                     allocInfo.memoryTypeIndex = findMemType(memreq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, _memProps);
 
                     CRITICAL_VULKAN_CALLBACK(vkAllocateMemory(_device, &allocInfo, nullptr, &_devMem));
@@ -377,6 +366,15 @@ namespace Engine {
                 VkClearValue clearValue = {0.0f, 0.0f, 0.0f, 1.0f};
                 for(int i = 0; i < _swapchain_framebuffers.size(); ++i)
                 {
+                    VkCommandBufferBeginInfo begin;
+                    ZeroMem(begin);
+                    begin.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+                    begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+                    begin.pInheritanceInfo = nullptr;
+
+                    CHECK_VULKAN_CALLBACK(vkBeginCommandBuffer(_commandBuffers[i], &begin));
+
+
                     VkRenderPassBeginInfo rpass;
                     ZeroMem(rpass);
                     rpass.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
