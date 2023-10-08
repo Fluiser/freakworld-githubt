@@ -17,10 +17,6 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME ON)
 link_directories(${Boost_LIBRARIES_CMAKE})
 
-set(SFML_DIR ${INCLUDE_DIR}/SFML/lib/cmake/SFML)
-set(SFML_STATIC_LIBRARIES TRUE)
-find_package(SFML 2.5.1 REQUIRED graphics audio window system)
-
 add_compile_definitions(NOMINMAX=TRUE)
 
 if (WIN32)
@@ -35,19 +31,6 @@ endif(UNIX)
 
 include_directories(${INCLUDE_DIR} ./)
 
-set(DiscordRPC "System/DiscordRPC")
-
-if(WIN32)
-	set(DISCORD_LNK System/DiscordRPC/achievement_manager.cpp System/DiscordRPC/achievement_manager.h System/DiscordRPC/activity_manager.cpp System/DiscordRPC/activity_manager.h System/DiscordRPC/application_manager.cpp System/DiscordRPC/application_manager.h System/DiscordRPC/core.cpp System/DiscordRPC/core.h System/DiscordRPC/image_manager.cpp System/DiscordRPC/image_manager.h System/DiscordRPC/lobby_manager.cpp System/DiscordRPC/lobby_manager.h System/DiscordRPC/network_manager.cpp System/DiscordRPC/network_manager.h System/DiscordRPC/overlay_manager.cpp System/DiscordRPC/overlay_manager.h System/DiscordRPC/relationship_manager.cpp System/DiscordRPC/relationship_manager.h System/DiscordRPC/storage_manager.cpp System/DiscordRPC/storage_manager.h System/DiscordRPC/store_manager.cpp System/DiscordRPC/store_manager.h System/DiscordRPC/types.cpp System/DiscordRPC/types.h System/DiscordRPC/user_manager.cpp System/DiscordRPC/user_manager.h System/DiscordRPC/voice_manager.cpp System/DiscordRPC/voice_manager.h)
-	set(DISCORD_DLL ${CMAKE_CURRENT_SOURCE_DIR}/System/DiscordRPC/lib/discord_game_sdk.dll.lib)
-else()
-
-	set(DISCORD_LNK "")
-	set(DISCORD_DLL "")
-
-endif()
-
-message(LNK: ${DISCORD_LNK}\n DLL LIB: ${DISCORD_DLL})
 
 add_executable(freakWorld
 		System/Window/Vulkan.hpp						System/Window/Vulkan.cpp
@@ -62,4 +45,4 @@ add_executable(freakWorld
 
 find_package(glfw3 CONFIG REQUIRED)
 find_package(Vulkan REQUIRED)
-target_link_libraries(freakWorld sfml-graphics sfml-audio sfml-window sfml-system ${Boost_LIBRARIES} ${OTHER_LIB} glfw Vulkan::Vulkan)
+target_link_libraries(freakWorld ${Boost_LIBRARIES} ${OTHER_LIB} glfw Vulkan::Vulkan)
