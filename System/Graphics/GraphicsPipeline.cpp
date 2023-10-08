@@ -424,8 +424,8 @@ namespace Engine {
                     )
                         return i;
                 }
-                return 0;
                 DEB_LOG("uint32_t Pipeline::findMemType(uint32_t filter, VkMemoryPropertyFlags flag, VkPhysicalDeviceMemoryProperties& prop): Can't find memory type\n");
+                return 0;
             }
         }
     }
