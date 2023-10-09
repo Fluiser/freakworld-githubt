@@ -97,8 +97,6 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
             };
             static constexpr auto handleFreakAtanh = [](float& x)
             {
-                if(x < 0)
-                    x = M_PI + x + M_PI;
             };
 
             for(uint32_t i = 2; i < vxr.size(); i += 3)
