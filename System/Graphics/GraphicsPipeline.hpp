@@ -20,6 +20,8 @@ namespace Engine {
                 public:
                     glm::vec2 pos;
                     glm::vec3 color;
+
+                    Vertex& operator=(const Vertex&);
                 private:
                     static VkVertexInputBindingDescription getDescription();
                     static std::array<VkVertexInputAttributeDescription, 2> getAttribyteDescription();

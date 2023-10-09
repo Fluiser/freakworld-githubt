@@ -102,7 +102,7 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
             };
 
             for(uint32_t i = 2; i < vxr.size(); i += 3)
-            {
+            {                
                 auto& an = vxr[i-2];
                 auto& bn = vxr[i-1];
                 auto& cn = vxr[i];
@@ -129,9 +129,8 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
                 if( c.second < b.second)
                 {
                     move_vertx(c, b);
-                }
+                }               
             }
-
             _VkDriver.draw();
             _VkDriver.qSumbit();
             _VkDriver.display();

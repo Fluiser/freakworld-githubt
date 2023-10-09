@@ -109,12 +109,12 @@ namespace Engine {
                 ZeroMem(raster);
                 raster.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
                 raster.rasterizerDiscardEnable = VK_FALSE;
-                raster.depthClampEnable = VK_FALSE;
+                raster.depthClampEnable = VK_TRUE;
                 raster.polygonMode = VK_POLYGON_MODE_FILL;
                 raster.lineWidth = 1.0f;
-                raster.cullMode = VK_CULL_MODE_BACK_BIT;
+                raster.cullMode = VK_CULL_MODE_NONE;
                 raster.frontFace = VK_FRONT_FACE_CLOCKWISE;
-                raster.depthBiasEnable = VK_FALSE;
+                raster.depthBiasEnable = VK_TRUE; 
 
                 VkPipelineMultisampleStateCreateInfo multisampling;
                 ZeroMem(multisampling);
@@ -430,6 +430,14 @@ namespace Engine {
                 }
                 DEB_LOG("uint32_t Pipeline::findMemType(uint32_t filter, VkMemoryPropertyFlags flag, VkPhysicalDeviceMemoryProperties& prop): Can't find memory type\n");
                 return 0;
+            }
+
+            Pipeline::Vertex& Pipeline::Vertex::operator=(const Pipeline::Vertex& another)
+            {
+                this->color = another.color;
+                this->pos = another.pos;
+
+                return (*this);
             }
         }
     }
