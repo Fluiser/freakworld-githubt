@@ -109,12 +109,12 @@ namespace Engine {
                 ZeroMem(raster);
                 raster.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
                 raster.rasterizerDiscardEnable = VK_FALSE;
-                raster.depthClampEnable = VK_TRUE;
+                raster.depthClampEnable = VK_FALSE;
                 raster.polygonMode = VK_POLYGON_MODE_FILL;
                 raster.lineWidth = 1.0f;
                 raster.cullMode = VK_CULL_MODE_NONE;
                 raster.frontFace = VK_FRONT_FACE_CLOCKWISE;
-                raster.depthBiasEnable = VK_TRUE; 
+                raster.depthBiasEnable = VK_FALSE; 
 
                 VkPipelineMultisampleStateCreateInfo multisampling;
                 ZeroMem(multisampling);
