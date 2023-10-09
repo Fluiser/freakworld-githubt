@@ -80,57 +80,6 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
 
         void Window::display()
         {
-            auto& vxr = _VkDriver.getVertex();
-
-            static constexpr auto move_vertx = [](std::pair<System::Graphics::Pipeline::Vertex&, float>& a, std::pair<System::Graphics::Pipeline::Vertex&, float>& b)
-            {
-                auto t = b.first;
-                b.first = a.first;
-                a.first = t;
-
-                float tf = b.second;
-                b.second = a.second;
-                a.second = tf;
-            };
-            static constexpr auto distance_vertx = [](const glm::vec2& a) -> float {
-                return sqrt(a.x*a.x + a.y*a.y);
-            };
-            static constexpr auto handleFreakAtanh = [](float& x)
-            {
-                if(x < 0)
-                    x = M_PI + x + M_PI;
-            };
-
-            for(uint32_t i = 2; i < vxr.size(); i += 3)
-            {                
-                auto& an = vxr[i-2];
-                auto& bn = vxr[i-1];
-                auto& cn = vxr[i];
-
-                glm::vec2 center{
-                    (an.pos.x + bn.pos.x + cn.pos.x) / 3,
-                    (an.pos.y + bn.pos.y + cn.pos.y) / 3
-                };
-
-                std::pair<System::Graphics::Pipeline::Vertex&, float> c(vxr[i],     atan2f(vxr[i].pos.y +   center.y,    vxr[i].pos.x  + center.x));
-                std::pair<System::Graphics::Pipeline::Vertex&, float> b(vxr[i-1],   atan2f(vxr[i-1].pos.y  + center.y,  vxr[i-1].pos.x  + center.x));
-                std::pair<System::Graphics::Pipeline::Vertex&, float> a(vxr[i-2],   atan2f(vxr[i-2].pos.y  + center.y,  vxr[i-2].pos.x  + center.x));
-
-
-
-                if( c.second < b.second)
-                {
-                    move_vertx(c, b);
-                }
-                if( b.second < a.second )
-                {
-                    move_vertx(a,b);   
-                }
-                if( c.second < b.second)
-                {
-                    move_vertx(c, b);
-                }               
-            }
             _VkDriver.draw();
             _VkDriver.qSumbit();
             _VkDriver.display();
