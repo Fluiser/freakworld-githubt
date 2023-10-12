@@ -409,6 +409,7 @@ namespace Engine
 
                 CRITICAL_VULKAN_CALLBACK(vkQueuePresentKHR(_presentq, &presentInfo));
                 CHECK_VULKAN_CALLBACK(vkQueueWaitIdle(_presentq));
+                CHECK_VULKAN_CALLBACK(vkResetCommandPool(_device, _renderPool, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT));
                 CHECK_VULKAN_CALLBACK(vkDeviceWaitIdle(_device));
             }
 
