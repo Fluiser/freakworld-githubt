@@ -410,7 +410,7 @@ namespace Engine
                 CRITICAL_VULKAN_CALLBACK(vkQueuePresentKHR(_presentq, &presentInfo));
                 CHECK_VULKAN_CALLBACK(vkQueueWaitIdle(_presentq));
                 CHECK_VULKAN_CALLBACK(vkResetCommandPool(_device, _renderPool, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT));
-                CHECK_VULKAN_CALLBACK(vkDeviceWaitIdle(_device));
+                // CHECK_VULKAN_CALLBACK(vkDeviceWaitIdle(_device));
             }
 
             void VulkanDriver::addVertex(Engine::System::Graphics::Pipeline::Vertex vertex, Engine::System::Graphics::Pipeline* pipeline)
