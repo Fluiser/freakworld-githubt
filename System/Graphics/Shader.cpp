@@ -20,6 +20,9 @@ namespace Engine {
             void Shader::createFromFile(VkDevice device, std::string path)
             {
                 std::ifstream file(path, std::ios::binary);
+                if(!file.is_open()) {
+                    DEB_LOG("Shader (" << path << ") can't be read or not exist")
+                }
                 _program.insert(_program.begin(), std::istreambuf_iterator<char>(file), {});
                 
                 VkShaderModuleCreateInfo crInfo;
