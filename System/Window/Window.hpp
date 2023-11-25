@@ -8,7 +8,6 @@
 #include <System/Window/Vulkan.hpp>
 #include <GLFW/glfw3.h>
 #include <System/Util.hpp>
-#include <errors.h>
 #include <string>
 #include <mutex>
 

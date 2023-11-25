@@ -4,13 +4,16 @@
 
 #ifdef DEBUG
 #include <iostream>
-
+#ifdef WIN32
 #define DEB_LOG(x) {HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);  \
  SetConsoleTextAttribute(hConsole, 2); \
  auto& s = std::cout << "[DEBUG]: ";\
   SetConsoleTextAttribute(hConsole, 7); \
   s << x; \
 }
+#else 
+#define DEB_LOG(x) {std::cout << x << '\n';}
+#endif 
 
 #if defined(_MSVC_LANG)
 #define BREAK_POINT DebugBreak()
